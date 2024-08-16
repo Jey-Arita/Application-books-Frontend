@@ -70,6 +70,7 @@ export const InicioPage = () => {
           {/* Repite para otros libros */}
        
         </div>
+        
       </main>
   );
 };
