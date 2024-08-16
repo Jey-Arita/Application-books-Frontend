@@ -68,9 +68,7 @@ export const InicioPage = () => {
             </div>
           </div>
           {/* Repite para otros libros */}
-       
         </div>
-        
       </main>
   );
 };
