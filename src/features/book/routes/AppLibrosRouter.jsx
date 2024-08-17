@@ -11,7 +11,7 @@ export const AppLibrosRouter = () => {
         <div className="container mx-auto">
           <Routes>
             <Route path="/inicio" element={<InicioPage />} />
-            <Route path="/libro" element={<LibroPage />} />
+            <Route path="/inicio/libro/:id" element={<LibroPage />} />
             <Route path="/autor" element={<AutorPage />} />
             <Route path="/favorito" element={<FavoritosPage />} />
             <Route path="/*" element={<Navigate to="/inicio" />} />

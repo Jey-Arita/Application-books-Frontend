@@ -1,10 +1,17 @@
-import { useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import { CiSearch } from "react-icons/ci";
 import { FaArrowRight, FaArrowLeft } from "react-icons/fa";
+import { useInicio } from "../hooks/index"; // Importa el hook
 
 export const Barra = () => {
   const scrollRef = useRef(null);
+  const { libros, loadLibros, isLoading } = useInicio(); // Usa el hook
+
+  useEffect(() => {
+    loadLibros("", 1); // Carga los libros desde la API
+    console.log(libros);
+  }, [loadLibros]);
 
   const scrollLeft = () => {
     scrollRef.current.scrollBy({ left: -300, behavior: "smooth" });
@@ -13,14 +20,6 @@ export const Barra = () => {
   const scrollRight = () => {
     scrollRef.current.scrollBy({ left: 300, behavior: "smooth" });
   };
-
-  const librosDestacados = [
-    {
-      titulo: "El Principito",
-      imagen: "https://upload.wikimedia.org/wikipedia/commons/1/1c/El_principito.jpg",
-      link: "/libro/el-principito",
-    },
-  ];
 
   return (
     <div className="py-4">
@@ -52,23 +51,29 @@ export const Barra = () => {
           className="flex overflow-x-auto space-x-6 px-8"
           style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
         >
-          {librosDestacados.map((libro, index) => (
-            <Link
-              key={index}
-              to="/libro"
-              className="flex-none w-60 group relative overflow-hidden rounded-lg shadow-lg"
-            >
-              <img
-                src={libro.imagen}
-                alt={libro.titulo}
-                className="w-full h-auto object-cover transition-transform duration-500 ease-in-out group-hover:scale-110"
-                style={{ aspectRatio: '3/4', objectFit: 'cover' }}
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black to-transparent flex items-end p-4">
-                <div className="text-white font-bold text-xl">{libro.titulo}</div>
-              </div>
-            </Link>
-          ))}
+          {isLoading ? (
+            <p>Cargando...</p>
+          ) : libros?.data?.items?.length ? (
+            libros.data.items.map((libro, index) => (
+              <Link
+                key={index}
+                to={`/inicio/libro/${libro.idlibro}`}
+                className="flex-none w-60 group relative overflow-hidden rounded-lg shadow-lg"
+              >
+                <img
+                  src={libro.urlImg}
+                  alt={libro.titulo}
+                  className="w-full h-auto object-cover transition-transform duration-500 ease-in-out group-hover:scale-110"
+                  style={{ aspectRatio: '3/4', objectFit: 'cover' }}
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black to-transparent flex items-end p-4">
+                  <div className="text-white font-bold text-xl">{libro.titulo}</div>
+                </div>
+              </Link>
+            ))
+          ) : (
+            <p>No hay libros disponibles</p>
+          )}
         </div>
         <button
           onClick={scrollRight}
@@ -80,3 +85,5 @@ export const Barra = () => {
     </div>
   );
 };
+
+export default Barra;
