@@ -1,7 +1,6 @@
 import { useState } from "react";
 
 export const Comenta = () => {
-  // Mueve los hooks useState al nivel superior
   const [comenta, setComenta] = useState("");
   const [comentas, setComentas] = useState([
     {

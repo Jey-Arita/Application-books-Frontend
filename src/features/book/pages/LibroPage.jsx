@@ -8,7 +8,6 @@ import { Comenta } from "../components";
 
 export const LibroPage = () => {
 
-
   const [isFavorito, setIsFavorito] = useState(false);
   const [ratio, setRatio] = useState(0); 
 
@@ -77,7 +76,7 @@ export const LibroPage = () => {
             </p>
             <div className="grid gap-2 py-4">
               <h2 className="text-3xl font-bold text-blue-600">Autor</h2>
-            <Link to="/autor" className="font-semibold text-gray-600 hover:text-rose-500" prefetch={false}>
+            <Link to={`/libro`} className="font-semibold text-gray-600 hover:text-rose-500" prefetch={false}>
               Antoine de Saint-Exupéry
             </Link>
             </div>

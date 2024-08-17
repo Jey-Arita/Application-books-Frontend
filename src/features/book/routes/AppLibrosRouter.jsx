@@ -12,7 +12,7 @@ export const AppLibrosRouter = () => {
           <Routes>
             <Route path="/inicio" element={<InicioPage />} />
             <Route path="/libro" element={<LibroPage />} />
-            <Route path="/autor" element={<AutorPage />} />
+            <Route path="/autor/:idAutor" element={<AutorPage />} />
             <Route path="/favorito" element={<FavoritosPage />} />
             <Route path="/*" element={<Navigate to="/inicio" />} />
           </Routes>
