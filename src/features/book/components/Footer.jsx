@@ -14,13 +14,13 @@ export const Footer = () => {
               </p>
             </div>
             <div className="flex flex-col sm:flex-row gap-4">
-              <Link to="inicio/" className=" text-white hover:text-[#FF6F61]">
+              <Link to="/inicio" className=" text-white hover:text-[#FF6F61]">
                 Inicio
               </Link>
-              <Link to="#" className=" text-white hover:text-[#FF6F61]">
-                Perfil
+              <Link to="/usuario" className=" text-white hover:text-[#FF6F61]">
+                Usuario
               </Link>
-              <Link to="#" className=" text-white hover:text-[#FF6F61]">
+              <Link to="/favorito" className=" text-white hover:text-[#FF6F61]">
                 Lista de favoritos
               </Link>
             </div>
