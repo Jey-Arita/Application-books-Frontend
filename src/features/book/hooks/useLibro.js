@@ -1,29 +1,22 @@
-import { useState, useEffect } from 'react';
-import { getBookDetalles } from '../../../shared/actions/libros/libro'; // Asegúrate de que la ruta sea correcta
+import { useState } from "react";
+import { getBookDetalles } from "../../../shared/actions/libros/libro";
 
-export const useBookDetalles = (idLibro) => {
-    const [bookDetalles, setBookDetails] = useState(null);
+export const useLibro = (id) => {
+    const [libro, setLibro] = useState({});
     const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState(null);
 
-    useEffect(() => {
-        const fetchBookDetails = async () => {
-            setIsLoading(true);
-            setError(null);
-            try {
-                const result = await getBookDetalles(idLibro);
-                setBookDetails(result);
-            } catch (err) {
-                setError(err);
-            } finally {
-                setIsLoading(false);
-            }
-        };
+    const loadLibro = async (id) => {
+        setIsLoading(true);
+        const result = await getBookDetalles(id);
+        setLibro(result.data);
+        setIsLoading(false);
+    }
+    return{
+        //Properties
+        libro,
+        isLoading,
+        //Methods
+        loadLibro,
+    }
+}
 
-        if (idLibro) {
-            fetchBookDetails();
-        }
-    }, [idLibro]);
-
-    return { bookDetalles, isLoading, error };
-};
