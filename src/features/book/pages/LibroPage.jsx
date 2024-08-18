@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { HiOutlineStar } from "react-icons/hi";
 import { BsHeart } from "react-icons/bs";
-import { useLibro } from "../hooks/useLibro"; // Importa el hook personalizado
+import { useLibro } from "../hooks/useLibro";
 
 export const LibroPage = () => {
   const { id } = useParams(); // Obtén el id de la URL
@@ -16,7 +16,7 @@ export const LibroPage = () => {
     if (id) {
       loadLibro(id);
     }
-  }, [id, loadLibro]);
+  }, [id]);
 
   // Manejador para alternar el estado de favorito
   const handleFavoritoClick = () => {
@@ -35,17 +35,13 @@ export const LibroPage = () => {
   if (!libro) {
     return <p>No se encontraron detalles para este libro.</p>;
   }
-
-  // Asegúrate de que el objeto libro tenga la estructura esperada
-  const libroData = libro.data || {};
-
   return (
     <div className="max-w-6xl mx-auto px-4 py-12 sm:px-6 lg:px-8 bg-gray-50">
       <div className="grid md:grid-cols-2 gap-8">
         <div>
           <img
-            src={libroData.urlImg}
-            alt={libroData.titulo}
+            src={libro.urlImg}
+            alt={libro.titulo}
             width={400}
             height={600}
             className="w-full h-auto rounded-lg border border-gray-300 shadow-lg"
@@ -54,24 +50,24 @@ export const LibroPage = () => {
         </div>
         <div className="grid gap-6">
           <div>
-            <h1 className="text-3xl font-bold text-blue-600">{libroData.titulo}</h1>
-            <div className="mt-2 text-gray-600">Genero: {libroData.genero}</div>
+            <h1 className="text-3xl font-bold text-blue-600">{libro.titulo}</h1>
+            <div className="mt-2 text-gray-600">Genero: {libro.genero}</div>
           </div>
           <div className="prose max-w-none text-gray-800">
-            <p>{libroData.descripcion}</p>
+            <p>{libro.descripcion}</p>
             <div className="grid gap-2 py-4">
               <h2 className="text-3xl font-bold text-blue-600">Autor</h2>
               <Link
-                to={`/autor/${libroData.idAutor}`}
+                to={`/autor/${libro.idAutor}`}
                 className="font-semibold text-gray-600 hover:text-rose-500"
               >
-                {libroData.idAutor}
+                {libro.idAutor}
               </Link>
             </div>
           </div>
           <div className="mt-1 flex flex-col sm:flex-row sm:gap-3">
             <Link
-              to={libroData.urlPdf}
+              to={libro.urlPdf}
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex h-9 items-center justify-center rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow transition-colors hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -95,7 +91,9 @@ export const LibroPage = () => {
           </div>
           {/* Sección para calificar el libro */}
           <div className="mt-4">
-            <h2 className="text-xl font-semibold text-blue-600">Calificar Libro</h2>
+            <h2 className="text-xl font-semibold text-blue-600">
+              Calificar Libro
+            </h2>
             <div className="flex items-center gap-1 mt-2">
               {Array.from({ length: 5 }, (_, i) => (
                 <HiOutlineStar
@@ -110,7 +108,7 @@ export const LibroPage = () => {
           </div>
         </div>
       </div>
-      <div className="my-12 border-t border-gray-300" />
+      <div className="my-12 border-t border-gray-300" /> 
     </div>
   );
 };
