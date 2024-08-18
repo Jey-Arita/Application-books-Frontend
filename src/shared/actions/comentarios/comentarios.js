@@ -9,3 +9,14 @@ export const getComentarioList = async (idLibro) => {
         return error.response;
     }
 }
+
+
+export const addComentario = async (newComentario) => {
+    try {
+        const { data } = await appApi.post(`/comentario`, newComentario);
+        return data;
+    } catch (error) {
+        console.error(error);
+        return error.response;
+    }
+};
