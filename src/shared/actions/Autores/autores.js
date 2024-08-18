@@ -5,7 +5,7 @@ export const getAutorById = async (idAutor) => {
         const { data } = await appApi.get(`/autor/${idAutor}`);
         return data;
     } catch (error) {
-        console.error("Error al obtener el autor:", error);
+        console.error(error);
         throw error; 
     }
 };

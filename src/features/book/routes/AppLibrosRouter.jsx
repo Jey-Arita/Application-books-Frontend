@@ -1,7 +1,7 @@
 import { Navigate, Route, Routes } from "react-router-dom";
 import { Footer, Nav } from "../components";
 import { InicioPage } from "../pages/InicioPage";
-import { AutorPage, FavoritosPage, LibroPage } from "../pages";
+import { AutorPage, FavoritosPage, LibroPage, UsuarioPages, } from "../pages";
 
 export const AppLibrosRouter = () => {
   return (
@@ -14,6 +14,7 @@ export const AppLibrosRouter = () => {
             <Route path="/libro" element={<LibroPage />} />
             <Route path="/autor/:idAutor" element={<AutorPage />} />
             <Route path="/favorito" element={<FavoritosPage />} />
+            <Route path="/usuario" element={<UsuarioPages />} />
             <Route path="/*" element={<Navigate to="/inicio" />} />
           </Routes>
         </div>
