@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useInicio } from "../hooks/index";
 import LibroListItem from "./LibroListItem";
 import { Pagination } from "../../../shared/components/pagination"; // Asegúrate de que la ruta sea correcta
+import { LibroListSkeleton } from "./ListSkeleton";
 
 export const LibrosList = () => {
   const { libros, loadLibros, isLoading } = useInicio();
@@ -28,7 +29,7 @@ export const LibrosList = () => {
   return (
     <div>
       {isLoading ? (
-        <p>Cargando...</p>
+        <LibroListSkeleton/>
       ) : (
         <div>
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 py-4">
