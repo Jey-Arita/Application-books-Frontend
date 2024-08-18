@@ -1,7 +1,7 @@
 import { Navigate, Route, Routes } from "react-router-dom";
 import { Footer, Nav } from "../components";
 import { InicioPage } from "../pages/InicioPage";
-import { AutorPage, FavoritosPage, LibroPage } from "../pages";
+import { AutorPage, FavoritosPage, LibroPage, UsuarioPages, } from "../pages";
 
 export const AppLibrosRouter = () => {
   return (
@@ -11,9 +11,15 @@ export const AppLibrosRouter = () => {
         <div className="container mx-auto">
           <Routes>
             <Route path="/inicio" element={<InicioPage />} />
+<<<<<<< HEAD
             <Route path="/inicio/libro/:id" element={<LibroPage />} />
             <Route path="/autor" element={<AutorPage />} />
+=======
+            <Route path="/libro" element={<LibroPage />} />
+            <Route path="/autor/:idAutor" element={<AutorPage />} />
+>>>>>>> rama-autor
             <Route path="/favorito" element={<FavoritosPage />} />
+            <Route path="/usuario" element={<UsuarioPages />} />
             <Route path="/*" element={<Navigate to="/inicio" />} />
           </Routes>
         </div>

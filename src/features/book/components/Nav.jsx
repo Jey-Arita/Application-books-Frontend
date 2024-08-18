@@ -37,8 +37,8 @@ export const Nav = () => {
                     <Link to="/inicio" className="my-1 text-white hover:text-rose-500 md:mx-4 md:my-0" onClick={closeMenu}>
                         Inicio
                     </Link>
-                    <Link to="#" className="my-1  text-white hover:text-rose-500 md:mx-4 md:my-0" onClick={closeMenu}>
-                        Perfil
+                    <Link to="/usuario" className="my-1  text-white hover:text-rose-500 md:mx-4 md:my-0" onClick={closeMenu}>
+                        Usuario
                     </Link>
                     <Link to="/favorito" className="my-1  text-white hover:text-rose-500 md:mx-4 md:my-0" onClick={closeMenu}>
                         Lista de Favoritos
