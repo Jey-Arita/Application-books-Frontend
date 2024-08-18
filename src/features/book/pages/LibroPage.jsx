@@ -5,11 +5,9 @@ import { BsHeart } from "react-icons/bs";
 import { useLibro } from "../hooks/useLibro";
 
 export const LibroPage = () => {
-<<<<<<< HEAD
   const { id } = useParams(); // Obtén el id de la URL
   const { libro, isLoading, loadLibro } = useLibro(id); // Usa el hook personalizado
-=======
->>>>>>> rama-autor
+
 
   const [isFavorito, setIsFavorito] = useState(false);
   const [ratio, setRatio] = useState(0);
@@ -21,7 +19,7 @@ export const LibroPage = () => {
     }
   }, [id]);
 
-  // Manejador para alternar el estado de favorito
+
   const handleFavoritoClick = () => {
     setIsFavorito(!isFavorito);
   };
@@ -60,18 +58,15 @@ export const LibroPage = () => {
             <p>{libro.descripcion}</p>
             <div className="grid gap-2 py-4">
               <h2 className="text-3xl font-bold text-blue-600">Autor</h2>
-<<<<<<< HEAD
               <Link
                 to={`/autor/${libro.idAutor}`}
                 className="font-semibold text-gray-600 hover:text-rose-500"
               >
                 {libro.idAutor}
               </Link>
-=======
             <Link to={`/libro`} className="font-semibold text-gray-600 hover:text-rose-500" prefetch={false}>
               Antoine de Saint-Exupéry
             </Link>
->>>>>>> rama-autor
             </div>
           </div>
           <div className="mt-1 flex flex-col sm:flex-row sm:gap-3">
