@@ -3,25 +3,24 @@ import { useComentario } from "../hooks/useComentario";
 
 export const Comenta = ({ libroId }) => {
   const [comenta, setComenta] = useState("");
-  const { comentario, isLoading, loadComentario } = useComentario(libroId); // Usar el hook useComentario
+  const { comentario, isLoading, loadComentario } = useComentario(libroId);
 
-  // Efecto para cargar los comentarios basados en el libroId
   useEffect(() => {
     if (libroId) {
-      loadComentario(libroId); // Cargar comentarios usando el hook
+      loadComentario(libroId);
     }
   }, [libroId]);
 
   const handleComentaSubmit = (e) => {
     e.preventDefault();
     const newComenta = {
-      id: comentario.length + 1,
-      name: "Anonymous", // Aquí puedes reemplazarlo por el nombre del usuario autenticado si lo deseas
-      text: comenta,
-      libroId, // Asociar comentario con el libroId
+      idComentario: generateid(), // Genera un ID único
+      name: "Anonymous",
+      comentario: comenta,
+      libroId,
     };
     // Actualiza los comentarios con el nuevo comentario
-    setComentario([...comentario, newComenta]); // Agrega el nuevo comentario a la lista existente
+    setComentario([...comentario, newComenta]);
     setComenta("");
   };
 
@@ -60,7 +59,7 @@ export const Comenta = ({ libroId }) => {
           {comentario.map((comenta) => (
             <div
               className="flex gap-4 p-4 border border-gray-300 rounded-md shadow-sm"
-              key={comenta.id}
+              key={comenta.idComentario} // Usa idComentario como clave
             >
               <div className="w-12 h-12 border rounded-full flex items-center justify-center">
                 <img
