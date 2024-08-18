@@ -1,53 +1,58 @@
-import React from 'react'
+import React from 'react';
 
 export const Pagination = ({
   totalPages,
-  handlePreviousPage = () => {},
+  handlePreviousPage,
   hasPreviousPage,
   handleCurrentPage,
   currentPage,
-  handleNextPage = () => {},
+  handleNextPage,
   hasNextPage
 }) => {
-return (
-  <div className="flex">
-    <button
-      onClick={handlePreviousPage}
-      disabled={!hasPreviousPage}
-      className={`px-3 py-2 mx-1 font-medium bg-white text-gray-500 rounded-md ${
-        !hasPreviousPage
-          ? "cursor-not-allowed"
-          : "hover:bg-unah-blue hover:text-white"
-      }`}
-    >
-      Anterior
-    </button>
+  const generatePageNumbers = () => {
+    // Generar números de páginas basados en totalPages
+    const pages = [];
+    for (let i = 1; i <= totalPages; i++) {
+      pages.push(i);
+    }
+    return pages;
+  };
 
-    {[...Array(totalPages)].map((value, index) => (
+  return (
+    <div className="flex items-center justify-center space-x-2">
       <button
-        key={generateId()}
-        onClick={() => handleCurrentPage(index + 1)}
-        className={`px-3 py-2 mx-1 font-medium rounded-md text-gray-700 ${
-          currentPage === index + 1
-            ? "bg-unah-blue text-white"
-            : "hover:bg-unah-blue hover:text-white"
+        onClick={handlePreviousPage}
+        disabled={!hasPreviousPage}
+        className={`px-3 py-2 font-medium bg-gray-200 text-gray-600 rounded-md ${
+          !hasPreviousPage ? "cursor-not-allowed" : "hover:bg-gray-300"
         }`}
       >
-        {index + 1}
+        Anterior
       </button>
-    ))}
 
-    <button
-      onClick={handleNextPage}
-      disabled={!hasNextPage}
-      className={`px-3 py-2 mx-1 font-medium bg-white text-gray-500 rounded-md ${
-        !hasNextPage
-          ? "cursor-not-allowed"
-          : "hover:bg-unah-blue hover:text-white"
-      }`}
-    >
-      Siguiente
-    </button>
-  </div>
-);
+      {generatePageNumbers().map((pageNumber) => (
+        <button
+          key={pageNumber}
+          onClick={() => handleCurrentPage(pageNumber)}
+          className={`px-3 py-2 font-medium rounded-md text-gray-800 ${
+            currentPage === pageNumber
+              ? "bg-blue-500 text-white"
+              : "hover:bg-blue-100"
+          }`}
+        >
+          {pageNumber}
+        </button>
+      ))}
+
+      <button
+        onClick={handleNextPage}
+        disabled={!hasNextPage}
+        className={`px-3 py-2 font-medium bg-gray-200 text-gray-600 rounded-md ${
+          !hasNextPage ? "cursor-not-allowed" : "hover:bg-gray-300"
+        }`}
+      >
+        Siguiente
+      </button>
+    </div>
+  );
 };
