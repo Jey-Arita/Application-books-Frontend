@@ -1,25 +1,33 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useComentario } from "../hooks/useComentario";
 
-export const Comenta = () => {
+export const Comenta = ({ libroId }) => {
   const [comenta, setComenta] = useState("");
-  const [comentas, setComentas] = useState([
-    {
-      id: 1,
-      name: "John Doe",
-      text: "Increíble Libro tiene una historia fascinante",
-    },
-  ]);
+  const { comentario, isLoading, loadComentario } = useComentario(libroId); // Usar el hook useComentario
+
+  // Efecto para cargar los comentarios basados en el libroId
+  useEffect(() => {
+    if (libroId) {
+      loadComentario(libroId); // Cargar comentarios usando el hook
+    }
+  }, [libroId]);
 
   const handleComentaSubmit = (e) => {
     e.preventDefault();
     const newComenta = {
-      id: comentas.length + 1,
-      name: "Anonymous",
+      id: comentario.length + 1,
+      name: "Anonymous", // Aquí puedes reemplazarlo por el nombre del usuario autenticado si lo deseas
       text: comenta,
+      libroId, // Asociar comentario con el libroId
     };
-    setComentas([...comentas, newComenta]);
+    // Actualiza los comentarios con el nuevo comentario
+    setComentario([...comentario, newComenta]); // Agrega el nuevo comentario a la lista existente
     setComenta("");
   };
+
+  if (isLoading) {
+    return <p>Cargando comentarios...</p>;
+  }
 
   return (
     <div>
@@ -49,7 +57,7 @@ export const Comenta = () => {
       <div>
         <h2 className="text-2xl font-bold mb-6 text-gray-800">Comentarios</h2>
         <div className="grid gap-8">
-          {comentas.map((comenta) => (
+          {comentario.map((comenta) => (
             <div
               className="flex gap-4 p-4 border border-gray-300 rounded-md shadow-sm"
               key={comenta.id}
@@ -64,10 +72,10 @@ export const Comenta = () => {
               <div className="grid gap-2">
                 <div className="flex items-center gap-2">
                   <div className="font-semibold text-gray-800">
-                    {comenta.name}
+                    {comenta.nombreUsuario}
                   </div>
                 </div>
-                <p className="text-gray-600">{comenta.text}</p>
+                <p className="text-gray-600">{comenta.comentario}</p>
               </div>
             </div>
           ))}

@@ -1,8 +1,8 @@
 import { useState } from "react";
-import { getComentarioList } from "../../../shared/actions/comentarios";
+import { getComentarioList } from "../../../shared/actions/comentarios/comentarios";
 
 export const useComentario = (id) => {
-    const [comentario, setComentario] = useState({});
+    const [comentario, setComentario] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
 
     const loadComentario = async (id) => {

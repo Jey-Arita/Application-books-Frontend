@@ -122,7 +122,7 @@ useEffect(() => {
         </div>
       </div>
       <div className="my-12 border-t border-gray-300" />
-      <Comenta /> 
+      <Comenta libroId={id} />
     </div>
   );
 };

@@ -9,3 +9,14 @@ export const getUsuario = async () => {
         throw error; 
     }
 };
+
+
+export const getUsuarioById = async (id) => {
+  try {
+    const { data } = await appApi.get(`/usuarios/${id}`);
+    return data;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};

@@ -1,6 +1,5 @@
 import { useCallback, useState } from "react";
-import { getUsuario } from "../../../shared/actions/usuario/usuario";
-
+import { getUsuario, getUsuarioById } from "../../../shared/actions/usuario/usuario";
 
 export const useUsuarios = () => {
   const [usuarios, setUsuarios] = useState([]);
