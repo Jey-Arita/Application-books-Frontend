@@ -3,11 +3,13 @@ import { Link, useParams } from "react-router-dom";
 import { HiOutlineStar } from "react-icons/hi";
 import { BsHeart } from "react-icons/bs";
 import { useLibro } from "../hooks/useLibro";
+import { useAutor } from "../hooks";
+
 
 export const LibroPage = () => {
   const { id } = useParams(); // Obtén el id de la URL
   const { libro, isLoading, loadLibro } = useLibro(id); // Usa el hook personalizado
-
+  const {autor, isLoading: isLoadingAutor, loadAutor } = useAutor(libro?.idAutor)
 
   const [isFavorito, setIsFavorito] = useState(false);
   const [ratio, setRatio] = useState(0);
@@ -19,6 +21,11 @@ export const LibroPage = () => {
     }
   }, [id]);
 
+useEffect(() => {
+  if(libro?.idAutor){
+    loadAutor(libro.idAutor);
+  }
+},[libro]);
 
   const handleFavoritoClick = () => {
     setIsFavorito(!isFavorito);
@@ -29,7 +36,7 @@ export const LibroPage = () => {
     setRatio(newRatio);
   };
 
-  if (isLoading) {
+  if (isLoading || isLoadingAutor) {
     return <p>Cargando detalles del libro...</p>;
   }
 
@@ -58,15 +65,16 @@ export const LibroPage = () => {
             <p>{libro.descripcion}</p>
             <div className="grid gap-2 py-4">
               <h2 className="text-3xl font-bold text-blue-600">Autor</h2>
-              <Link
+              {autor ? (
+                <Link
                 to={`/autor/${libro.idAutor}`}
                 className="font-semibold text-gray-600 hover:text-rose-500"
               >
-                {libro.idAutor}
+                {autor.nombreAutor}
               </Link>
-            <Link to={`/libro`} className="font-semibold text-gray-600 hover:text-rose-500" prefetch={false}>
-              Antoine de Saint-Exupéry
-            </Link>
+              ) : (
+                <p>No se encontró el autor</p>
+              )}
             </div>
           </div>
           <div className="mt-1 flex flex-col sm:flex-row sm:gap-3">
