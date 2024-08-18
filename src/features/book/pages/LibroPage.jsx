@@ -4,6 +4,7 @@ import { HiOutlineStar } from "react-icons/hi";
 import { BsHeart } from "react-icons/bs";
 import { useLibro } from "../hooks/useLibro";
 import { useAutor } from "../hooks";
+import { Comenta } from "../components/Comenta";
 
 
 export const LibroPage = () => {
@@ -120,7 +121,8 @@ useEffect(() => {
           </div>
         </div>
       </div>
-      <div className="my-12 border-t border-gray-300" /> 
+      <div className="my-12 border-t border-gray-300" />
+      <Comenta /> 
     </div>
   );
 };

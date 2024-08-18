@@ -86,4 +86,3 @@ export const Barra = () => {
   );
 };
 
-export default Barra;
