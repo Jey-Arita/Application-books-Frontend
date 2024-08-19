@@ -37,6 +37,9 @@ export const Nav = () => {
                     <Link to="/inicio" className="my-1 text-white hover:text-rose-500 md:mx-4 md:my-0" onClick={closeMenu}>
                         Inicio
                     </Link>
+                    <Link to="/autores" className="my-1 text-white hover:text-rose-500 md:mx-4 md:my-0" onClick={closeMenu}>
+                        Autores
+                    </Link>
                     <Link to="/usuario" className="my-1  text-white hover:text-rose-500 md:mx-4 md:my-0" onClick={closeMenu}>
                         Usuario
                     </Link>
