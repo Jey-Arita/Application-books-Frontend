@@ -20,3 +20,13 @@ export const addComentario = async (newComentario) => {
         return error.response;
     }
 };
+
+export const deleteComentario = async (id) => {
+    try {
+        const { data } = await appApi.delete(`/comentario/${id}`);
+        return data;
+    } catch (error) {
+        console.error(error);
+        return error.response;
+    }
+};

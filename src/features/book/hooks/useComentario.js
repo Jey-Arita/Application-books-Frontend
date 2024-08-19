@@ -1,6 +1,6 @@
 
 import { useState } from "react";
-import { getComentarioList, addComentario } from "../../../shared/actions/comentarios/comentarios";
+import { getComentarioList, addComentario, deleteComentario } from "../../../shared/actions/comentarios/comentarios";
 
 export const useComentario = (id) => {
   const [comentario, setComentario] = useState([]);
@@ -34,6 +34,14 @@ export const useComentario = (id) => {
       setIsLoading(false);
     }
   };
+  
+  const deletComentar = async (idComentario) => {
+    setIsLoading(true);
+    setError(null);  
+    const result = await deleteComentario(idComentario);
+    setIsLoading(false);
+    return { status: result?.status ?? false };
+  };
 
   return {
     comentario,
@@ -41,5 +49,6 @@ export const useComentario = (id) => {
     error,
     loadComentario,
     sendComentario,
+    deletComentar,
   };
 };
