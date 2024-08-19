@@ -11,6 +11,13 @@ export const AutorPage = () => {
     loadAutor();
   }, [loadAutor]);
 
+  const limitDescription = (description) => {
+    const palabras = description.split(' ');
+    return palabras.length > 10
+      ? palabras.slice(0, 10).join(' ') + '...'
+      : description;
+  };
+
   return (
     <div className="bg-gray-100 text-gray-800 min-h-screen flex flex-col">
       {isLoading ? (
@@ -70,7 +77,7 @@ export const AutorPage = () => {
                             {libro.titulo}
                           </Link>
                         </h3>
-                        <p className="text-gray-600">{libro.descripcion}</p>
+                        <p className="text-gray-600">{limitDescription(libro.descripcion)}</p>
                       </div>
                     </div>
                   ))}

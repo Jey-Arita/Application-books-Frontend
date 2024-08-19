@@ -24,7 +24,7 @@ export const Pagination = ({
         onClick={handlePreviousPage}
         disabled={!hasPreviousPage}
         className={`px-3 py-2 font-medium bg-gray-200 text-gray-600 rounded-md ${
-          !hasPreviousPage ? "cursor-not-allowed" : "hover:bg-gray-300"
+          !hasPreviousPage ? "cursor-not-allowed" : "hover:bg-rose-500 hover:text-white"
         }`}
       >
         Anterior
@@ -36,7 +36,7 @@ export const Pagination = ({
           onClick={() => handleCurrentPage(pageNumber)}
           className={`px-3 py-2 font-medium rounded-md text-gray-800 ${
             currentPage === pageNumber
-              ? "bg-blue-500 text-white"
+              ? "bg-blue-600 text-white"
               : "hover:bg-blue-100"
           }`}
         >
@@ -48,7 +48,7 @@ export const Pagination = ({
         onClick={handleNextPage}
         disabled={!hasNextPage}
         className={`px-3 py-2 font-medium bg-gray-200 text-gray-600 rounded-md ${
-          !hasNextPage ? "cursor-not-allowed" : "hover:bg-gray-300"
+          !hasNextPage ? "cursor-not-allowed" : "hover:bg-rose-500 hover:text-white"
         }`}
       >
         Siguiente
