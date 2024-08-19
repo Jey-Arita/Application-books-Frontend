@@ -6,11 +6,14 @@ import { useLibro } from "../hooks/useLibro";
 import { useAutor } from "../hooks";
 import { Comenta } from "../components/Comenta";
 
-
 export const LibroPage = () => {
   const { id } = useParams(); // Obtén el id de la URL
   const { libro, isLoading, loadLibro } = useLibro(id); // Usa el hook personalizado
-  const {autor, isLoading: isLoadingAutor, loadAutor } = useAutor(libro?.idAutor)
+  const {
+    autor,
+    isLoading: isLoadingAutor,
+    loadAutor,
+  } = useAutor(libro?.idAutor);
 
   const [isFavorito, setIsFavorito] = useState(false);
   const [ratio, setRatio] = useState(0);
@@ -22,11 +25,11 @@ export const LibroPage = () => {
     }
   }, [id]);
 
-useEffect(() => {
-  if(libro?.idAutor){
-    loadAutor(libro.idAutor);
-  }
-},[libro]);
+  useEffect(() => {
+    if (libro?.idAutor) {
+      loadAutor(libro.idAutor);
+    }
+  }, [libro]);
 
   const handleFavoritoClick = () => {
     setIsFavorito(!isFavorito);
@@ -44,6 +47,9 @@ useEffect(() => {
   if (!libro) {
     return <p>No se encontraron detalles para este libro.</p>;
   }
+  const estrellasLlenas = Math.round(libro.promedio) || 0;
+  const estrellas = Array(5).fill(null);
+
   return (
     <div className="max-w-6xl mx-auto px-4 py-12 sm:px-6 lg:px-8 bg-gray-50">
       <div className="grid md:grid-cols-2 gap-8">
@@ -61,6 +67,14 @@ useEffect(() => {
           <div>
             <h1 className="text-3xl font-bold text-blue-600">{libro.titulo}</h1>
             <div className="mt-2 text-gray-600">Genero: {libro.genero}</div>
+            <div className="flex items-center mt-2">
+            {estrellas.map((_, index) => (
+                <HiOutlineStar
+                  key={index}
+                  className={`w-6 h-6 ${index < estrellasLlenas ? "text-yellow-500" : "text-gray-300"}`}
+                />
+              ))}
+            </div>
           </div>
           <div className="prose max-w-none text-gray-800">
             <p>{libro.descripcion}</p>
@@ -68,11 +82,11 @@ useEffect(() => {
               <h2 className="text-3xl font-bold text-blue-600">Autor</h2>
               {autor ? (
                 <Link
-                to={`/autor/${libro.idAutor}`}
-                className="font-semibold text-gray-600 hover:text-rose-500"
-              >
-                {autor.nombreAutor}
-              </Link>
+                  to={`/autor/${libro.idAutor}`}
+                  className="font-semibold text-gray-600 hover:text-rose-500"
+                >
+                  {autor.nombreAutor}
+                </Link>
               ) : (
                 <p>No se encontró el autor</p>
               )}

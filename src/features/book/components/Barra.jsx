@@ -1,6 +1,5 @@
 import React, { useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
-import { CiSearch } from "react-icons/ci";
 import { FaArrowRight, FaArrowLeft } from "react-icons/fa";
 import { useLibroDestacado } from "../hooks/index";
 
@@ -36,19 +35,6 @@ const librosOrdenados = libros?.data?.slice().sort((a, b) => {
 
   return (
     <div className="py-4">
-      <div className="flex items-center mb-6 md:mb-8 text-gray-900">
-        <div className="relative flex-1">
-          <CiSearch className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" />
-          <input
-            type="search"
-            placeholder="Buscar libros"
-            className="w-full pl-10 pr-4 py-2 rounded-md bg-white text-blue-600 placeholder-blue-600 focus:outline-none focus:ring-2 focus:ring-rose-500"
-          />
-        </div>
-        <button className="ml-4 px-4 py-2 bg-rose-500 text-white rounded-md hover:bg-rose-500">
-          Buscar
-        </button>
-      </div>
       <div className="py-3">
         <h1 className="text-3xl font-bold text-blue-600">Libros destacados</h1>
       </div>

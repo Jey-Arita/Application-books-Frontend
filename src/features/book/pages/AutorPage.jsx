@@ -57,7 +57,7 @@ export const AutorPage = () => {
                       key={libro.idlibro}
                       className="flex flex-col mx-6 gap-2 p-4 bg-white shadow rounded"
                     >
-                      <Link to={`/libro/${libro.idlibro}`} prefetch={false}>
+                      <Link to={`/inicio/libro/${libro.idlibro}`} prefetch={false}>
                         <img
                           src={libro.urlImg}
                           alt={libro.titulo}
@@ -70,7 +70,7 @@ export const AutorPage = () => {
                       <div>
                         <h3 className="text-lg font-semibold">
                           <Link
-                            to={`/libro/${libro.idlibro}`}
+                            to={`/inicio/libro/${libro.idlibro}`}
                             className="hover:underline hover:text-rose-500"
                             prefetch={false}
                           >
