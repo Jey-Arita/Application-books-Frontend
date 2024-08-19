@@ -2,16 +2,20 @@ import React, { useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import { CiSearch } from "react-icons/ci";
 import { FaArrowRight, FaArrowLeft } from "react-icons/fa";
-import { useInicio } from "../hooks/index"; // Importa el hook
+import { useLibroDestacado } from "../hooks/index";
 
 export const Barra = () => {
   const scrollRef = useRef(null);
-  const { libros, loadLibros, isLoading } = useInicio(); // Usa el hook
+  const { libros, loadLibros, isLoading } = useLibroDestacado();
 
   useEffect(() => {
-    loadLibros("", 1); // Carga los libros desde la API
-    console.log(libros);
+    loadLibros("", 1);
   }, [loadLibros]);
+
+  useEffect(() => {
+    if (libros) {
+    }
+  }, [libros]);
 
   const scrollLeft = () => {
     scrollRef.current.scrollBy({ left: -300, behavior: "smooth" });
@@ -20,6 +24,15 @@ export const Barra = () => {
   const scrollRight = () => {
     scrollRef.current.scrollBy({ left: 300, behavior: "smooth" });
   };
+
+const librosOrdenados = libros?.data?.slice().sort((a, b) => {
+  return (b.promedio || 0) - (a.promedio || 0);
+})?.slice(0, 15);
+
+  useEffect(() => {
+    if (librosOrdenados) {
+    }
+  }, [librosOrdenados]);
 
   return (
     <div className="py-4">
@@ -53,8 +66,8 @@ export const Barra = () => {
         >
           {isLoading ? (
             <p>Cargando...</p>
-          ) : libros?.data?.items?.length ? (
-            libros.data.items.map((libro, index) => (
+          ) : librosOrdenados?.length ? (
+            librosOrdenados.map((libro, index) => (
               <Link
                 key={index}
                 to={`/inicio/libro/${libro.idlibro}`}
@@ -85,4 +98,3 @@ export const Barra = () => {
     </div>
   );
 };
-
