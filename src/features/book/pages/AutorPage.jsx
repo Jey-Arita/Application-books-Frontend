@@ -21,21 +21,23 @@ export const AutorPage = () => {
   return (
     <div className="bg-gray-100 text-gray-800 min-h-screen flex flex-col">
       {isLoading ? (
-        <p className="text-center py-4">Cargando...</p>
+        <div className="flex justify-center items-center h-screen">
+          <div className="animate-spin rounded-full h-32 w-32 border-t-4 border-blue-600" ></div>
+        </div>
       ) : autor ? (
         <>
           <header className="bg-primary text-primary-foreground py-8 px-4 md:px-6">
             <div className="container mx-auto max-w-4xl">
-              <h1 className="text-4xl font-bold text-blue-600">
+              <h1 className="text-4xl text-center font-bold text-blue-600 mb-4">
                 {autor.nombreAutor}
               </h1>
-              <div className="mt-4 flex">
+              <div className="mt-4 flex justify-center">
                 <img
                   src={autor.urlImg}
                   alt={autor.nombreAutor}
+                  className="rounded-full border-4 border-blue-600 shadow-lg"
                   width={200}
                   height={200}
-                  className="rounded-full"
                   style={{ aspectRatio: "1 / 1", objectFit: "cover" }}
                 />
               </div>
@@ -55,7 +57,7 @@ export const AutorPage = () => {
                   {autor.libros?.map((libro) => (
                     <div
                       key={libro.idlibro}
-                      className="flex flex-col mx-6 gap-2 p-4 bg-white shadow rounded"
+                      className="flex flex-col mx-6 gap-2 p-4 bg-white shadow hover:shadow-lg rounded transition-shadow duration-300"
                     >
                       <Link to={`/inicio/libro/${libro.idlibro}`} prefetch={false}>
                         <img
@@ -85,6 +87,7 @@ export const AutorPage = () => {
               </div>
             </div>
           </main>
+          <Link to="/autores" className="py-4 text-2xl text-blue-600 hover:underline mb-4 text-center">Ver la lista de autores</Link>
         </>
       ) : (
         <p className="text-center py-4">No se encontraron autores.</p>

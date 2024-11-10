@@ -36,7 +36,7 @@ const librosOrdenados = libros?.data?.slice().sort((a, b) => {
   return (
     <div className="py-4">
       <div className="py-3">
-        <h1 className="text-3xl font-bold text-blue-600">Libros destacados</h1>
+        <h1 className="text-3xl font-bold text-blue-500">Libros destacados</h1>
       </div>
       <div className="relative">
         <button

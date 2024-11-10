@@ -5,6 +5,7 @@ import { BsHeart } from "react-icons/bs";
 import { useLibro } from "../hooks/useLibro";
 import { useAutor } from "../hooks";
 import { Comenta } from "../components/Comenta";
+import LibroPageSkeleton from "../components/LibroPageSkeleton";
 
 export const LibroPage = () => {
   const { id } = useParams(); // Obtén el id de la URL
@@ -41,7 +42,7 @@ export const LibroPage = () => {
   };
 
   if (isLoading || isLoadingAutor) {
-    return <p>Cargando detalles del libro...</p>;
+    return <LibroPageSkeleton/>;
   }
 
   if (!libro) {
@@ -51,7 +52,7 @@ export const LibroPage = () => {
   const estrellas = Array(5).fill(null);
 
   return (
-    <div className="max-w-6xl mx-auto px-4 py-12 sm:px-6 lg:px-8 bg-gray-50">
+    <div className="max-w-6xl mx-auto px-4 py-14 sm:px-6 lg:px-8 bg-gray-100">
       <div className="grid md:grid-cols-2 gap-8">
         <div>
           <img
@@ -65,7 +66,7 @@ export const LibroPage = () => {
         </div>
         <div className="grid gap-6">
           <div>
-            <h1 className="text-3xl font-bold text-blue-600">{libro.titulo}</h1>
+            <h1 className="text-3xl font-bold text-blue-500">{libro.titulo}</h1>
             <div className="mt-2 text-gray-600">Genero: {libro.genero}</div>
             <div className="flex items-center mt-2">
             {estrellas.map((_, index) => (

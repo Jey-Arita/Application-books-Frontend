@@ -36,8 +36,8 @@ export const Pagination = ({
           onClick={() => handleCurrentPage(pageNumber)}
           className={`px-3 py-2 font-medium rounded-md text-gray-800 ${
             currentPage === pageNumber
-              ? "bg-blue-600 text-white"
-              : "hover:bg-blue-100"
+              ? "bg-rose-500 text-white"
+              : "hover:bg-rose-100"
           }`}
         >
           {pageNumber}

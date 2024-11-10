@@ -18,15 +18,15 @@ export const FavoritosPage = () => {
   };
 
   return (
-    <div className="container mx-auto px-4 py-12 bg-gray-100">
+    <div className="container mx-auto px-4 py-12 bg-gray-200">
       <div className="max-w-3xl mx-auto">
-        <h1 className="text-3xl font-bold mb-2">Mis Libros Favoritos</h1>
+        <h1 className="text-3xl font-bold mb-2 text-blue-500">Mis Libros Favoritos</h1>
         <p className="text-muted-foreground mb-8">
           Aquí está su lista de favoritos para que tenga una mayor facilitad de ir buscar sus libros preferidos.
         </p>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
           {userFavoriteBooks.map((book, index) => (
-            <div key={index} className="bg-card rounded-lg overflow-hidden shadow-lg">
+            <div key={index} className="bg-card rounded-lg overflow-hidden shadow-lg bg-white">
               <Link to="/libro">
                 <img
                   src={book.image}

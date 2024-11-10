@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useAutor } from "../hooks/index";
 import { useNavigate } from 'react-router-dom';
+import { AutorListSkeleton } from "../components";
 
 export const AutoresPage = () => {
     const { autores, isLoading, loadAutores } = useAutor();
@@ -16,7 +17,7 @@ export const AutoresPage = () => {
     }, [loadAutores]);
 
     if (isLoading) {
-        return <p className="text-center text-gray-500">Cargando autores...</p>;
+        return <AutorListSkeleton/>;
     }
 
     if (!autores || autores.length === 0) {
@@ -28,11 +29,11 @@ export const AutoresPage = () => {
     };
 
     return (
-        <div className="p-6 bg-gray-100 min-h-screen">
-            <h2 className="text-2xl font-bold text-center mb-6 text-gray-800">Lista de Autores</h2>
+        <div className="p-8 bg-gray-100 min-h-screen py-14">
+            <h2 className="text-3xl font-bold text-center mb-6 text-blue-500">Lista de Autores</h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
                 {autores.map((autor) => (
-                    <div key={autor.idAutor} className="bg-white shadow-lg rounded-lg overflow-hidden hover:shadow-xl transition-shadow duration-300">
+                    <div key={autor.idAutor} className="bg-white shadow-lg rounded-lg overflow-hidden hover:shadow-xl transform hover:scale-105 transition-transform duration-300">
                         <img 
                             src={autor.urlImg} 
                             alt={`Imagen de ${autor.nombreAutor}`} 
