@@ -1,11 +1,13 @@
 import { BsPerson } from "react-icons/bs";
 import { MdEmail } from "react-icons/md";
 import { RiLockPasswordLine } from "react-icons/ri";
+import { FondoSecurity } from "../components";
 
 export const CreateUserPage = () => {
     return (
-      <div className="w-full flex items-center justify-center min-h-screen bg-gradient-to-br from-gray-200 to-gray-300">
-        <div className="bg-white rounded-lg shadow-2xl overflow-hidden transform hover:scale-105 transition-transform duration-300 p-8">
+      <div className="w-full flex items-center justify-center min-h-screen">
+        <FondoSecurity/>
+        <div className="bg-gray-100 rounded-lg shadow-2xl overflow-y-hidden transform hover:scale-105 transition-transform duration-300 p-8">
           <div className="space-y-1">
             <h2 className="text-3xl font-bold text-center text-blue-500">Crea tu cuenta</h2>
             <p className="py-3 text-center">
@@ -21,6 +23,18 @@ export const CreateUserPage = () => {
                   <input
                     id="username"
                     placeholder="TuNombreDeUsuario"
+                    className="pl-10 border border-gray-300 rounded-md w-full py-2"
+                    required
+                  />
+                </div>
+              </div>
+              <div className="space-y-2">
+                <label htmlFor="username">Apellido de usuario</label>
+                <div className="relative">
+                  <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"><BsPerson className="w-6 h-6 mr-2"/></span>
+                  <input
+                    id="username"
+                    placeholder="TuApellidoDeUsuario"
                     className="pl-10 border border-gray-300 rounded-md w-full py-2"
                     required
                   />

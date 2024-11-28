@@ -1,12 +1,16 @@
-import { Navigate, Route, Routes } from "react-router-dom";
+import { Navigate, Route, Routes, useLocation } from "react-router-dom";
 import { Footer, Nav } from "../components";
 import { InicioPage } from "../pages/InicioPage";
-import { AutorPage, FavoritosPage, LibroPage, UsuarioPages, AutoresPage} from "../pages";
+import { AutorPage, FavoritosPage, LibroPage, UsuarioPages, AutoresPage, BienvenidaPage, CategoriaLibros} from "../pages";
 
 export const AppLibrosRouter = () => {
+  const location = useLocation();
+
+  // Determina si la ruta actual es "/bienvenida" para ocultar el Nav
+  const isBienvenidaPage = location.pathname === "/bienvenida";
   return (
     <div className="overflow-x-hidden from-gray-200 w-screen h-screen bg-hero-pattern bg-no-repeat bg-cover">
-      <Nav />
+      {!isBienvenidaPage && <Nav />}
       <div className="px-6 py-8">
         <div className="container mx-auto">
           <Routes>
@@ -18,7 +22,9 @@ export const AppLibrosRouter = () => {
             <Route path="/autor/:idAutor" element={<AutorPage />} />
             <Route path="/favorito" element={<FavoritosPage />} />
             <Route path="/usuario" element={<UsuarioPages />} />
-            <Route path="/*" element={<Navigate to="/inicio" />} />
+            <Route path="/bienvenida" element={<BienvenidaPage/>}/>
+            <Route path="/categoria" element={<CategoriaLibros/>}/>
+            <Route path="/*" element={<Navigate to="/bienvenida" />} />
           </Routes>
         </div>
       </div>

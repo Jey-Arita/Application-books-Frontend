@@ -6,7 +6,7 @@ export * from './LibroListItem'
 export * from './ListSkeleton'
 export * from './AutorListSkeleton'
 export * from './LibroPageSkeleton'
-
+export * from './FondoLibros'
 
 
 

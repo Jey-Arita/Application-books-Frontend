@@ -9,10 +9,10 @@ const LibroListItem = ({ libro }) => {
   const [imageLoaded, setImageLoaded] = useState(false);
   return (
     <div
-      key={libro.idlibro}
+      key={libro.id}
       className="group relative rounded-lg border p-4 shadow-md bg-white border-gray-300 transform hover:scale-105 transition-transform duration-300"
     >
-      <Link to={`/inicio/libro/${libro.idlibro}`} className="absolute inset-0 z-10"></Link>
+      <Link to={`/inicio/libro/${libro.id}`} className="absolute inset-0 z-10"></Link>
       <div className="flex h-40 items-center justify-center">
       {!imageLoaded && (
           <div className="bg-gray-200 w-full h-full animate-pulse rounded-md"></div>

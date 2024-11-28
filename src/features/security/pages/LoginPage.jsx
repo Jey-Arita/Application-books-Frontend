@@ -1,9 +1,11 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { loginInitValues, loginValidationSchema } from "../forms";
 import { useFormik } from "formik";
 import { FaArrowRight, FaEnvelope, FaLock } from "react-icons/fa6";
 import { Link, useNavigate } from "react-router-dom";
 import { Loading } from "../../../shared/components";
+import { useAuthStore } from "../store";
+import { FondoSecurity } from "../components";
 
 export const LoginPage = () => {
   const navigate = useNavigate();
@@ -15,7 +17,7 @@ export const LoginPage = () => {
 
   useEffect(() => {
     if (isAuthenticated) {
-      navigate("/home");
+      navigate("/inicio");
     }
   }, [isAuthenticated]);
 
@@ -34,11 +36,12 @@ export const LoginPage = () => {
   }
 
   return (
-    <div className="w-full min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-200 to-gray-400 p-4">
+    <div className="w-full min-h-screen flex items-center justify-center p-4">
+      <FondoSecurity/>
       <div className="w-full max-w-lg mx-auto my-4">
         {" "}
         {/* Expandimos el contenedor */}
-        <div className="bg-white rounded-lg shadow-2xl overflow-hidden transform hover:scale-105 transition-transform duration-300">
+        <div className="bg-gray-100 rounded-lg shadow-2xl overflow-hidden transform hover:scale-105 transition-transform duration-300">
           <h1 className="py-5 text-4xl font-bold text-center text-blue-600 mb-8 animate-fade-in-down">
             Iniciar Sesión
           </h1>

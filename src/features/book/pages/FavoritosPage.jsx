@@ -1,67 +1,100 @@
 import { Link } from "react-router-dom";
-import { BsHeart } from "react-icons/bs";
-import { useState } from "react";
+import { HiOutlineStar } from "react-icons/hi";
+import { useEffect, useState } from "react";
+import { HiMiniMagnifyingGlass } from "react-icons/hi2";
+
+const libros = [
+  {
+    id: 1,
+    titulo: "Cien Años de Soledad",
+    autor: "Gabriel García Márquez",
+    descripcion: "Una obra maestra de la literatura que explora la vida y las luchas de la familia Buendía en el pueblo ficticio de Macondo.",
+    imagen: "https://images.cdn2.buscalibre.com/fit-in/360x360/38/12/3812f54c9c10992f538ead2c95d775ed.jpg",
+    favorito: true,
+    calificacion: 5
+  },
+  {
+    id: 2,
+    titulo: "El Principito",
+    autor: "Antoine de Saint-Exupéry",
+    descripcion: "Un clásico que cuenta la historia de un piloto que conoce a un joven príncipe en el desierto, lleno de enseñanzas profundas.",
+    imagen: "https://15f8034cdff6595cbfa1-1dd67c28d3aade9d3442ee99310d18bd.ssl.cf3.rackcdn.com/uploaded_thumb_seo/13e84c6996c8d0e28195500d06bf00ff/El%20Principito%20-%20Antoine%20de%20Saint-Exupery_1.jpg",
+    favorito: true,
+    calificacion: 4
+  }
+];
 
 export const FavoritosPage = () => {
-  const userFavoriteBooks = [
-    {
-      title: "El Principito",
-      author: "Antoine de Saint-Exupéry",
-      image: "https://upload.wikimedia.org/wikipedia/commons/1/1c/El_principito.jpg",
-      link: "/libro/el-principito",
-    },
-  ];
-  const [isFavorite, setIsFavorite] = useState(false);
+  const [filteredLibros, setFilteredLibros] = useState(libros);
+  const [searchTerm, setSearchTerm] = useState("");
 
-  const handleFavoriteClick = () => {
-    setIsFavorite(!isFavorite);
-  };
+  useEffect(() => {
+    let result = libros;
+
+    if (searchTerm) {
+      result = result.filter(
+        (libro) =>
+          libro.titulo.toLowerCase().includes(searchTerm.toLowerCase()) 
+      );
+    }
+
+    setFilteredLibros(result);
+  }, [searchTerm]);
 
   return (
-    <div className="container mx-auto px-4 py-12 bg-gray-200">
-      <div className="max-w-3xl mx-auto">
-        <h1 className="text-3xl font-bold mb-2 text-blue-500">Mis Libros Favoritos</h1>
-        <p className="text-muted-foreground mb-8">
-          Aquí está su lista de favoritos para que tenga una mayor facilitad de ir buscar sus libros preferidos.
-        </p>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
-          {userFavoriteBooks.map((book, index) => (
-            <div key={index} className="bg-card rounded-lg overflow-hidden shadow-lg bg-white">
-              <Link to="/libro">
-                <img
-                  src={book.image}
-                  alt={book.title}
-                  width={400}
-                  height={500}
-                  className="w-full h-60 object-cover"
-                  style={{ aspectRatio: "400/500", objectFit: "cover" }}
-                />
-              </Link>
-              <div className="p-4">
-                <Link to="/libro">
-                  <h3 className="text-lg font-semibold mb-2 hover:underline">
-                    {book.title}
-                  </h3>
-                </Link>
-                <p className="text-muted-foreground mb-4">{book.author}</p>
-                <button
-              type="button"
-              className={`flex items-center h-9 mt-4 sm:mt-0 text-blue-600 hover:text-blue-800 transition-colors duration-200 ${
-                isFavorite ? 'text-rose-500' : ''
-              }`}
-              onClick={handleFavoriteClick}
+    <div className="min-h-screen bg-gradient-to-br from-gray-100 to-gray-200 py-12 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto">
+        <h1 className="text-4xl font-bold text-center text-blue-600 mb-8">
+          Mi Biblioteca de Libros Favoritos
+        </h1>
+
+        <div className="flex flex-col sm:flex-row justify-between items-center mb-6 space-y-4 sm:space-y-0 sm:space-x-4">
+          <div className="relative w-full sm:w-64">
+            <input
+              type="text"
+              placeholder="Buscar libros..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="pl-10 w-full py-2 px-4 rounded border border-gray-600"
+            />
+            <HiMiniMagnifyingGlass className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+          {filteredLibros.map((libro) => (
+            <Link
+              key={libro.id}
+              className="flex flex-col shadow-lg hover:shadow-xl transition-shadow duration-300 rounded-lg overflow-hidden bg-white"
             >
-              <BsHeart className={`w-4 h-4 mr-2 transition-transform duration-200 transform hover:scale-125 ${
-                isFavorite ? 'fill-current text-rose-500' : ''
-              }`} />
-              {isFavorite ? 'Favorito' : 'Agregar a Favoritos'}
-            </button>
+              <div className="relative">
+                <img
+                  src={libro.imagen}
+                  alt={`Portada de ${libro.titulo}`}
+                  className="w-full h-48 object-cover"
+                />
               </div>
-            </div>
+              <div className="p-4">
+                <h2 className="text-lg font-semibold line-clamp-1">{libro.titulo}</h2>
+                <p className="text-sm text-gray-600">{libro.autor}</p>
+                <p className="text-sm text-gray-600 line-clamp-3 mb-4">{libro.descripcion}</p>
+                <div className="flex items-center">
+                  {[...Array(5)].map((_, index) => (
+                    <HiOutlineStar
+                      key={index}
+                      className={`h-5 w-5 ${
+                        index < libro.calificacion
+                          ? "text-yellow-400 fill-yellow-400"
+                          : "text-gray-300"
+                      }`}
+                    />
+                  ))}
+                </div>
+              </div>
+            </Link>
           ))}
         </div>
       </div>
     </div>
   );
 };
-

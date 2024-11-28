@@ -90,7 +90,7 @@ export const Nav = () => {
             )}
           </div>
           <Link
-            to="/categorias"
+            to="/categoria"
             className="flex items-center text-white px-4 py-2 hover:bg-blue-600 transition-colors"
           >
             <BiSolidCategory className="w-5 h-5 mr-2" /> Categorías
@@ -192,7 +192,7 @@ export const Nav = () => {
             {categoriesOpen && (
               <div className="pl-4">
                 <Link
-                  to="/categorias/tecnologia"
+                  to="/categoria/"
                   className="block w-full text-left py-1 hover:bg-gray-100 transition-colors"
                   onClick={handleSidebarToggle}
                 >
