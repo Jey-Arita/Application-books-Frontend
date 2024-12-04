@@ -15,6 +15,7 @@ import { GoPerson } from "react-icons/go";
 import { GiBookPile } from "react-icons/gi";
 import { ProtectedComponent } from "../../../shared/components/ProtectedComponet";
 import { rolesListConstant } from "../../../shared/constants";
+import { RiAdminFill } from "react-icons/ri";
 
 export const Nav = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -59,10 +60,10 @@ export const Nav = () => {
           </Link>
           <ProtectedComponent requiredRoles={[rolesListConstant.ADMIN]}>
             <Link
-              to="/administration/dashboard"
-              className="my-1 text-white hover:text-unah-yellow md:mx-4 md:my-0"
+              to="/admin/autoraadmin"
+              className="flex items-center text-white px-4 py-2 hover:bg-blue-600 transition-colors"
             >
-              Administración
+             <RiAdminFill className="w-5 h-5 mr-2"/> Administración
             </Link>
           </ProtectedComponent>
           <Link
@@ -108,10 +109,10 @@ export const Nav = () => {
           </Link>
           <ProtectedComponent requiredRoles={[rolesListConstant.ADMIN]}>
             <Link
-              to="/administration/dashboard"
-              className="my-1 text-white hover:text-unah-yellow md:mx-4 md:my-0"
+              to="/admin/autoraadmin"
+              className="flex items-center w-full text-left py-2 hover:bg-gray-100 transition-colors"
             >
-              Administración
+             <RiAdminFill className="w-5 h-5 mr-2"/>  Administración
             </Link>
           </ProtectedComponent>
 
