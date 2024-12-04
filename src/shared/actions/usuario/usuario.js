@@ -20,3 +20,5 @@ export const getUsuarioById = async (id) => {
     throw error;
   }
 };
+
+

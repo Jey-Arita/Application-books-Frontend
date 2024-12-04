@@ -75,7 +75,7 @@ appApi.interceptors.response.use(
           logout();
           refreshingTokenPromise = null;
 
-          window.location.href = "/home";
+          window.location.href = "/inicio";
 
           return Promise.reject(error);
         });

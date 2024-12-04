@@ -43,7 +43,7 @@ export const useAuthStore = create((set, get) => ({
       localStorage.setItem('refreshToken', get().refreshToken);
     },
     logout: () => {
-      set({user: null, token: null, isAuthenticated:false, error: false, message:''})
+      set({user: null, token: null, refreshToken: null, isAuthenticated: false, error: false, message: '', roles: [],})
       localStorage.clear();
     },
     validateAuthentication: () => {
@@ -64,7 +64,7 @@ export const useAuthStore = create((set, get) => ({
   
           const roles = decodeJwt["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"] ?? [];
   
-          set({isAuthenticated: true, roles: typeof(roles) === 'string' ? [roles] : roles});
+          set({isAuthenticated: true , roles: typeof(roles) === 'string' ? [roles] : roles});
         } catch(error) {
           console.error(error);
           set({isAuthenticated: false})

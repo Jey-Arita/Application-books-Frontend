@@ -7,6 +7,6 @@ export * from './ListSkeleton'
 export * from './AutorListSkeleton'
 export * from './LibroPageSkeleton'
 export * from './FondoLibros'
-
+export * from './Paypal'
 
 

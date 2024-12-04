@@ -67,7 +67,7 @@ export const LibroPage = () => {
         <div className="grid gap-6">
           <div>
             <h1 className="text-3xl font-bold text-blue-500">{libro.titulo}</h1>
-            <div className="mt-2 text-gray-600">Genero: {libro.genero}</div>
+            <div className="mt-2 text-gray-600">Genero: {libro.idGenero}</div>
             <div className="flex items-center mt-2">
             {estrellas.map((_, index) => (
                 <HiOutlineStar
@@ -137,7 +137,7 @@ export const LibroPage = () => {
         </div>
       </div>
       <div className="my-12 border-t border-gray-300" />
-      <Comenta libroId={id} />
+      <Comenta libroId={id} /> 
     </div>
   );
 };
