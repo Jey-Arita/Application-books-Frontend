@@ -4,8 +4,8 @@ import { useEffect } from "react";
 import { Link } from "react-router-dom";
 
 export const AutorPage = () => {
-  const { idAutor } = useParams();
-  const { autor, isLoading, loadAutor } = useAutor(idAutor);
+  const { id } = useParams();
+  const { autor, isLoading, loadAutor } = useAutor(id);
 
   useEffect(() => {
     loadAutor();

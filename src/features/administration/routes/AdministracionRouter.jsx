@@ -3,6 +3,7 @@ import { Footer, Nav } from "../../book/components"
 
 import { Menu } from "../components"
 import { AdministracionAutor } from "../pages/AdministracionAutor"
+import { AdministracionLibro } from "../pages"
 
 
 export const AdministracionRouter = () => {
@@ -14,6 +15,7 @@ export const AdministracionRouter = () => {
           <Menu/>
             <Routes>
               <Route path='/autoraadmin' element={<AdministracionAutor />} />
+              <Route path='/libroadmin' element={<AdministracionLibro/>}/>
             </Routes>
           </div>
         </div>

@@ -8,8 +8,8 @@ export const AutoresPage = () => {
     const [expandedAutor, setExpandedAutor] = useState(null);
     const navigate = useNavigate();
 
-    const handleAuthorClick = (idAutor) => {
-        navigate(`/autor/${idAutor}`);
+    const handleAuthorClick = (id) => {
+        navigate(`/autor/${id}`);
     };
 
     useEffect(() => {
@@ -33,7 +33,7 @@ export const AutoresPage = () => {
             <h2 className="text-3xl font-bold text-center mb-6 text-blue-500">Lista de Autores</h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
                 {autores.map((autor) => (
-                    <div key={autor.idAutor} className="bg-white shadow-lg rounded-lg overflow-hidden hover:shadow-xl transform hover:scale-105 transition-transform duration-300">
+                    <div key={autor.id} className="bg-white shadow-lg rounded-lg overflow-hidden hover:shadow-xl transform hover:scale-105 transition-transform duration-300">
                         <img 
                             src={autor.urlImg} 
                             alt={`Imagen de ${autor.nombreAutor}`} 

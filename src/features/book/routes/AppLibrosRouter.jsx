@@ -19,7 +19,7 @@ export const AppLibrosRouter = () => {
             <Route path="/inicio/libro/:id" element={<LibroPage />} className="absolute inset-0 z-10" />
             <Route path="/autor" element={<AutorPage />} />
             <Route path="/libro" element={<LibroPage />} />
-            <Route path="/autor/:idAutor" element={<AutorPage />} />
+            <Route path="/autor/:id" element={<AutorPage />} />
             <Route path="/favorito" element={<FavoritosPage />} />
             <Route path="/usuario" element={<UsuarioPages />} />
             <Route path="/bienvenida" element={<BienvenidaPage/>}/>

@@ -21,31 +21,31 @@ export const Menu = () => {
       {/* Sección de Administración */}
       <div className="py-2 border-t border-gray-200">
         <Link
-          to="#"
+          to="/admin/autoraadmin"
           className="flex items-center px-6 py-3 text-xl font-medium text-gray-800 hover:text-blue-500 hover:bg-blue-100 transition duration-200"
         >
-          <BsFileEarmarkPersonFill className="w-6 h-6 mr-3" />
+          <BsFileEarmarkPersonFill className="w-6 h-6 mr-3 text-blue-500" />
           Autores
         </Link>
         <Link
-          to="#"
+          to="/admin/libroadmin"
           className="flex items-center px-6 py-3 text-xl font-medium text-gray-800 hover:text-blue-500 hover:bg-blue-100 transition duration-200"
         >
-          <ImBooks className="w-6 h-6 mr-3" />
+          <ImBooks className="w-6 h-6 mr-3 text-green-500" />
           Libros
         </Link>
         <Link
           to="#"
           className="flex items-center px-6 py-3 text-xl font-medium text-gray-800 hover:text-blue-500 hover:bg-blue-100 transition duration-200"
         >
-          <FaTags className="w-6 h-6 mr-3" />
+          <FaTags className="w-6 h-6 mr-3 text-rose-500" />
           Generos
         </Link>
         <Link
           to="#"
           className="flex items-center px-6 py-3 text-xl font-medium text-gray-800 hover:text-blue-500 hover:bg-blue-100 transition duration-200"
         >
-          <FaUsers className="w-6 h-6 mr-3" />
+          <FaUsers className="w-6 h-6 mr-3 text-purple-500" />
           Usuarios
         </Link>
       </div>

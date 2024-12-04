@@ -1,5 +1,4 @@
 import { Navigate, Route, Routes } from "react-router-dom"
-import { Footer, Nav } from "../../book/components"
 import { CreateUserPage, LoginPage } from "../pages"
 
 

@@ -4,12 +4,13 @@ import { loginAsync } from "../../../shared/actions/auth/auth.action";
 export const useAuthStore = create((set, get) => ({
     user: null,
     token: null,
+    roles: [],
+    refreshToken: null,
     isAuthenticated: false,
     message: "",
     error: false,
     login: async (form) => {
       const {status, data, message, } = await loginAsync(form);
-      console.log({status});
       
       if (status) {
         set({
@@ -43,6 +44,31 @@ export const useAuthStore = create((set, get) => ({
     logout: () => {
       set({user: null, token: null, isAuthenticated:false, error: false, message:''})
       localStorage.clear();
+    },
+    validateAuthentication: () => {
+      const token = localStorage.getItem('token') ?? '';
+  
+      if(token === '') {
+        set({isAuthenticated: false});
+        return ;
+      } else {
+        try{
+          const decodeJwt = jwtDecode(token);
+          const currenTime = Math.floor(Date.now()/1000);
+          if(decodeJwt.exp < currenTime) {
+            console.log('Token expirado');
+            set({isAuthenticated: false});
+            return;
+          }
+  
+          const roles = decodeJwt["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"] ?? [];
+  
+          set({isAuthenticated: true, roles: typeof(roles) === 'string' ? [roles] : roles});
+        } catch(error) {
+          console.error(error);
+          set({isAuthenticated: false})
+        }
+      }
     },
   }));
   
