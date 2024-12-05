@@ -5,7 +5,7 @@ export * from './FavoritosPage'
 export * from './UsuarioPages'
 export * from './AutoresPage'
 export * from './BienvenidaPage'
-export * from './CategoriasLibro'
+export * from './GeneroLibro'
 
 
 

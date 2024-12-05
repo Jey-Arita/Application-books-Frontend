@@ -1,4 +1,4 @@
-import { appApi } from "../../../config/api/appApi.Js";
+import { appApi } from "../../../config/api";
 
 export const getComentarioList = async (idLibro) => {
     try {
@@ -9,7 +9,6 @@ export const getComentarioList = async (idLibro) => {
         return error.response;
     }
 }
-
 
 export const addComentario = async (newComentario) => {
     try {

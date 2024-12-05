@@ -19,14 +19,9 @@ import { RiAdminFill } from "react-icons/ri";
 
 export const Nav = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const [isProfileMenuOpen, setProfileMenuOpen] = useState(false);
 
   const handleSidebarToggle = () => {
     setIsSidebarOpen(!isSidebarOpen);
-  };
-
-  const toggleProfileMenu = () => {
-    setProfileMenuOpen(!isProfileMenuOpen);
   };
 
   return (
@@ -67,10 +62,10 @@ export const Nav = () => {
             </Link>
           </ProtectedComponent>
           <Link
-            to="/categoria"
+            to="/genero"
             className="flex items-center text-white px-4 py-2 hover:bg-blue-600 transition-colors"
           >
-            <BiSolidCategory className="w-5 h-5 mr-2" /> Categorías
+            <BiSolidCategory className="w-5 h-5 mr-2" /> Genero
           </Link>
           <Link
             to="/favorito"
@@ -123,8 +118,10 @@ export const Nav = () => {
             <FaUser className="w-5 h-5 mr-2" /> Perfil
           </Link>
 
-          <Link className="flex items-center w-full text-left py-2 hover:bg-gray-100 transition-colors">
-            <BiSolidCategory className="w-5 h-5 mr-2" /> Categorías
+          <Link 
+          to="/genero"
+          className="flex items-center w-full text-left py-2 hover:bg-gray-100 transition-colors">
+            <BiSolidCategory className="w-5 h-5 mr-2" /> Genero
           </Link>
 
           <Link

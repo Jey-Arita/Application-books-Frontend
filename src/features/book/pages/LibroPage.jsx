@@ -4,8 +4,8 @@ import { HiOutlineStar } from "react-icons/hi";
 import { BsHeart } from "react-icons/bs";
 import { useLibro } from "../hooks/useLibro";
 import { useAutor } from "../hooks";
-import { Comenta } from "../components/Comenta";
 import LibroPageSkeleton from "../components/LibroPageSkeleton";
+import { Comenta } from "../components";
 
 export const LibroPage = () => {
   const { id } = useParams(); // Obtén el id de la URL
@@ -137,7 +137,7 @@ export const LibroPage = () => {
         </div>
       </div>
       <div className="my-12 border-t border-gray-300" />
-      <Comenta libroId={id} /> 
+       <Comenta libroId={libro.id} />  
     </div>
   );
 };

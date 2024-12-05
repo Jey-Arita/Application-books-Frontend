@@ -1,16 +1,16 @@
 
 import { useState } from "react";
-import { getComentarioList, addComentario, deleteComentario } from "../../../shared/actions/comentarios/comentarios";
+import { addComentario, deleteComentario, getComentarioList } from "../../../shared/actions/comentarios/comentarios";
 
-export const useComentario = (id) => {
+export const useComentario = (idLibro) => {
   const [comentario, setComentario] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  const loadComentario = async (id) => {
+  const loadComentario = async (idLibro) => {
     setIsLoading(true);
     setError(null); // Limpiar errores antes de cargar nuevos datos
-      const result = await getComentarioList(id);
+      const result = await getComentarioList(idLibro);
         setComentario(result.data);
         setError(result.message || 'Error al cargar comentarios');
       setIsLoading(false);
@@ -35,7 +35,7 @@ export const useComentario = (id) => {
     }
   };
   
-  const deletComentar = async (idComentario) => {
+  const deleteComentar = async (idComentario) => {
     setIsLoading(true);
     setError(null);  
     const result = await deleteComentario(idComentario);
@@ -49,6 +49,6 @@ export const useComentario = (id) => {
     error,
     loadComentario,
     sendComentario,
-    deletComentar,
+    deleteComentar,
   };
 };

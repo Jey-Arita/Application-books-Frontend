@@ -48,7 +48,7 @@ export const AutoresPage = () => {
                                     : `${autor.bibliografia.substring(0, 100)}...`}
                             </p>
                             <button 
-                                onClick={() => handleAuthorClick(autor.idAutor)} 
+                                onClick={() => handleAuthorClick(autor.id)} 
                                 className="text-blue-500 mt-2 hover:underline"
                             >
                                 Ver detalles

@@ -56,7 +56,7 @@ export const AutorPage = () => {
                 <div className="grid gap-6 sm:grid-cols-2 md:grid-cols-3">
                   {autor.libros?.map((libro) => (
                     <div
-                      key={libro.idlibro}
+                      key={libro.idlibro || libro.titulo}
                       className="flex flex-col mx-6 gap-2 p-4 bg-white shadow hover:shadow-lg rounded transition-shadow duration-300"
                     >
                       <Link to={`/inicio/libro/${libro.id}`} prefetch={false}>
