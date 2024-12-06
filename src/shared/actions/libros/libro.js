@@ -16,3 +16,33 @@ export const getBookDetalles = async (id) => {
     throw error;
   }
 };
+
+export const postLibro = async (form) => {
+  try {
+      const { data } = await appApi.post('/libros', form);
+      return data;
+  } catch (error) {
+      console.error(error);
+      throw error; 
+  }
+};
+
+export const putLibro = async (id, form) => {
+  try {
+      const { data } = await appApi.put(`/libros/${id}`, form);
+      return data;
+  } catch (error) {
+      console.error(error);
+      throw error; 
+  }
+};
+
+export const deleteLibro = async (id) => {
+  try {
+      const { data } = await appApi.delete(`/libros/${id}`);
+      return data;
+  } catch (error) {
+      console.error(error);
+      throw error; 
+  }
+};

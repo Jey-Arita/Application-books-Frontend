@@ -1,18 +1,18 @@
 import { create } from "zustand";
-import { postAutor } from "../../../shared/actions/Autores/autores";
+import { postLibro } from "../../../shared/actions/libros/libro";
 
-export const useAutorStore = create((set) => ({
-  autor: null,
+export const useLibrosStore = create((set) => ({
+  libro: null,
   loading: false,
   success: null,
   error: null,
   message: "",
-  addAutor: async (form) => {
+  addLibro: async (form) => {
     set({ loading: true, success: null, error: null, message: ""});
     try {
-      const newAutor = await postAutor(form);
+      const newLibro = await postLibro(form);
       set({
-        autor: newAutor,
+        libro: newLibro,
         loading: false,
         success: "Autor agregado exitosamente.",
         error: null,

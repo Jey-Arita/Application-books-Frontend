@@ -2,20 +2,14 @@ import { useEffect, useState } from "react";
 import { MdOutlineDriveFileRenameOutline, MdDescription } from "react-icons/md";
 import { FaFileImage, FaTrash, FaEdit } from "react-icons/fa";
 import { useFormik } from "formik";
-import { useAuthStore } from "../store";
 import { crearInitAutores, createAutorValidationSchema } from "../forms";
 import { useAutor } from "../../book/hooks";
 import { useDeleteAutor, useEditAutor } from "../hooks";
+import { useAutorStore } from "../store/useAutorStore";
 
 export const AdministracionAutor = () => {
-  const [nuevoAutor, setNuevoAutor] = useState({
-    nombreAutor: "",
-    bibliografia: "",
-    urlImg: "",
-  });
   const [modoEdicion, setModoEdicion] = useState(null);
-
-  const addAutor = useAuthStore((state) => state.addAutor);
+  const addAutor = useAutorStore((state) => state.addAutor);
   const { editarAutor, isLoadingEdit, errorEdit } = useEditAutor();
   const { eliminarAutor, isLoadingDelete, errorDelete } = useDeleteAutor();
 
@@ -31,6 +25,7 @@ export const AdministracionAutor = () => {
           // Si se actualiza correctamente, recarga la lista
           loadAutores();
           formik.resetForm();
+          setModoEdicion(null);
         }
       } else {
         await addAutor(formValues);

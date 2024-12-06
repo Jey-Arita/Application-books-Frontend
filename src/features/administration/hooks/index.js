@@ -1,3 +1,5 @@
 export * from './useDeleteAutor'
 export * from './useEditAutor'
 export * from './useDashboardTotales'
+export * from './useDeleteLibro'
+export * from './useEditLibro'
