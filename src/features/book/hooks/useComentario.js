@@ -9,13 +9,20 @@ export const useComentario = (idLibro) => {
 
   const loadComentario = async (idLibro) => {
     setIsLoading(true);
-    setError(null); // Limpiar errores antes de cargar nuevos datos
-      const result = await getComentarioList(idLibro);
-        setComentario(result.data);
-        setError(result.message || 'Error al cargar comentarios');
-      setIsLoading(false);
+try {
+  const result = await getComentarioList(idLibro);
+  setComentario(result.data);
+  console.log(result.data);
+  return result.data;
+} catch (err) {
+  setError(err.message || "Error al cargar comentarios");
+  return [];
+} finally {
+  setIsLoading(false); // Esto asegura que siempre se actualice al final
+}
 
   };
+  
 
   const sendComentario = async (newComentario) => {
     setIsLoading(true);

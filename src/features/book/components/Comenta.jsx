@@ -2,16 +2,18 @@ import { useState, useEffect } from "react";
 import { useComentario } from "../hooks/useComentario";
 import { formatoTiempo } from "../../../shared/utils/index";
 
-export const Comenta = ( libroId ) => {
+export const Comenta = ({ libroId }) => {
   const [comenta, setComenta] = useState("");
   const [comentarios, setComentarios] = useState([]);
-  const { isLoading, loadComentario, sendComentario, deleteComentar } = useComentario(libroId.libroId);
+  const [error, setError] = useState("");
+  const { isLoading, loadComentario, sendComentario, deleteComentar } = useComentario(libroId);
 
   useEffect(() => {
-    if (libroId && libroId.libroId) {
-      loadComentario(libroId.libroId).then((data) => {
+    console.log("ID del libro:", libroId); // Asegúrate de que no sea undefined o null
+    if (libroId) {
+      loadComentario(libroId).then((data) => {
         if (data && Array.isArray(data)) {
-          setComentarios(data);
+          setComentarios(data); // Actualiza los comentarios
         }
       });
     }
@@ -21,25 +23,27 @@ export const Comenta = ( libroId ) => {
     e.preventDefault();
 
     // Verifica si libroId está presente
-    if (!libroId || !libroId.libroId) {
-      alert("ID del libro no disponible");
+    if (!libroId) {
+      setError("ID del libro no disponible");
+      return;
+    }
+
+    if (!comenta.trim()) {
+      setError("El comentario no puede estar vacío");
       return;
     }
 
     const newComenta = {
-      idLibro: libroId.libroId,
-      idUsuario: "e056261b-f3c1-4621-a905-3a2f846cf6c5", // ID estático temporal
+      idLibro: libroId,
       comentario: comenta,
       fecha: new Date().toISOString(),
-      nombreUsuario: null,
-      idComentarioPadre: idComentarioPadre || null, // Si es respuesta, incluir el ID del comentario padre
+      idComentarioPadre: idComentarioPadre || null,
     };
-    console.log(newComenta);
 
     const result = await sendComentario(newComenta);
     if (result && result.status) {
       setComenta("");
-      // Si es una respuesta, agregamos a las respuestas del comentario padre
+      setError("");
       if (idComentarioPadre) {
         setComentarios((prev) =>
           prev.map((comenta) =>
@@ -49,11 +53,10 @@ export const Comenta = ( libroId ) => {
           )
         );
       } else {
-        // Si es un comentario nuevo, lo agregamos a la lista principal
         setComentarios((prev) => [result.data, ...prev]);
       }
     } else {
-      alert("Error al enviar el comentario");
+      setError("Error al enviar el comentario");
     }
   };
 
@@ -64,7 +67,7 @@ export const Comenta = ( libroId ) => {
         prev.filter((comenta) => comenta.id !== idComentario)
       );
     } else {
-      alert("Error al eliminar el comentario");
+      setError("Error al eliminar el comentario");
     }
   };
 
@@ -74,6 +77,7 @@ export const Comenta = ( libroId ) => {
 
   return (
     <div>
+      {error && <div className="text-red-500">{error}</div>}
       <div>
         <h2 className="text-2xl font-bold mb-6 text-gray-800">Agregar Comentarios</h2>
         <form onSubmit={(e) => handleComentaSubmit(e)} className="grid gap-4">
@@ -123,7 +127,7 @@ export const Comenta = ( libroId ) => {
                   {comenta.comentario}
                 </p>
                 <button
-                  onClick={() => handleComentaSubmit(event, comenta.id)}
+                  onClick={(event) => handleComentaSubmit(event, comenta.id)}
                   className="text-blue-500 mt-2"
                 >
                   Responder
@@ -132,52 +136,11 @@ export const Comenta = ( libroId ) => {
               <div className="mt-4 md:mt-0">
                 <button
                   onClick={() => handleDeleteComentario(comenta.id)}
-                  className="inline-flex items-center justify-center px-5 py-2 text-sm font-medium text-white bg-gradient-to-r from-red-500 to-pink-500 rounded-full shadow-md hover:from-red-600 hover:to-pink-600 focus:outline-none focus:ring-2 focus:ring-pink-400"
+                  className="inline-flex items-center justify-center px-5 py-2 text-sm font-medium text-white bg-red-600 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 hover:bg-red-700"
                 >
                   Eliminar
                 </button>
               </div>
-
-              {/* Mostrar respuestas anidadas */}
-              {comenta.respuestas && comenta.respuestas.length > 0 && (
-                <div className="ml-8 mt-4">
-                  {comenta.respuestas.map((respuesta) => (
-                    <div
-                      key={respuesta.id}
-                      className="flex flex-col md:flex-row md:items-center gap-4 p-4 bg-gray-100 border border-gray-200 rounded-lg shadow-sm"
-                    >
-                      <div className="w-10 h-10 rounded-full overflow-hidden border-2 border-gray-300 shadow-sm">
-                        <img
-                          src="https://definicion.de/wp-content/uploads/2019/07/perfil-de-usuario.png"
-                          alt={respuesta.nombreUsuario || "Anónimo"}
-                          className="w-full h-full object-cover"
-                        />
-                      </div>
-                      <div className="flex-1">
-                        <div className="flex justify-between items-center">
-                          <div className="text-lg font-semibold text-gray-800">
-                            {respuesta.nombreUsuario || "Anónimo"}
-                          </div>
-                          <div className="text-sm text-gray-500">
-                            {formatoTiempo(respuesta.fecha)}
-                          </div>
-                        </div>
-                        <p className="mt-3 text-gray-700 leading-relaxed">
-                          {respuesta.comentario}
-                        </p>
-                      </div>
-                      <div className="mt-4 md:mt-0">
-                        <button
-                          onClick={() => handleDeleteComentario(respuesta.id)}
-                          className="inline-flex items-center justify-center px-5 py-2 text-sm font-medium text-white bg-gradient-to-r from-red-500 to-pink-500 rounded-full shadow-md hover:from-red-600 hover:to-pink-600 focus:outline-none focus:ring-2 focus:ring-pink-400"
-                        >
-                          Eliminar
-                        </button>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              )}
             </div>
           ))}
         </div>
