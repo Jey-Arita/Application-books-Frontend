@@ -11,11 +11,11 @@ export const useEditAutor = () => {
     try {
       await putAutor(id, form);
       setIsLoading(false);
-      return true; // Retorna true si se editó con éxito
+      return true; 
     } catch (err) {
       setError("Error al editar el autor");
       setIsLoading(false);
-      return false; // Retorna false en caso de error
+      return false; 
     }
   };
 

@@ -55,7 +55,7 @@ export const Nav = () => {
           </Link>
           <ProtectedComponent requiredRoles={[rolesListConstant.ADMIN]}>
             <Link
-              to="/admin/autoraadmin"
+              to="/admin/dashboard"
               className="flex items-center text-white px-4 py-2 hover:bg-blue-600 transition-colors"
             >
              <RiAdminFill className="w-5 h-5 mr-2"/> Administración

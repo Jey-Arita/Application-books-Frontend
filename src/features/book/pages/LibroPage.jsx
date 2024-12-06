@@ -3,7 +3,7 @@ import { Link, useParams } from "react-router-dom";
 import { HiOutlineStar } from "react-icons/hi";
 import { BsHeart } from "react-icons/bs";
 import { useLibro } from "../hooks/useLibro";
-import { useAutor } from "../hooks";
+import { useAutor, useGeneroList } from "../hooks";
 import LibroPageSkeleton from "../components/LibroPageSkeleton";
 import { Comenta } from "../components";
 
@@ -18,6 +18,21 @@ export const LibroPage = () => {
 
   const [isFavorito, setIsFavorito] = useState(false);
   const [ratio, setRatio] = useState(0);
+
+  const { generos, loadGenero} = useGeneroList();
+  const [generosMap, setGenerosMap] = useState({});
+  useEffect(() => {
+    loadGenero(); 
+  }, []);
+
+  useEffect(() => {
+    // Crea un mapa de ID a nombre de genero
+    const generoMap = generos.reduce((map, genero) => {
+      map[genero.id] = genero.nombre; 
+      return map;
+    }, {});
+    setGenerosMap(generoMap);
+  }, [generos]);
 
   // Cargar los detalles del libro al montar el componente
   useEffect(() => {
@@ -67,7 +82,7 @@ export const LibroPage = () => {
         <div className="grid gap-6">
           <div>
             <h1 className="text-3xl font-bold text-blue-500">{libro.titulo}</h1>
-            <div className="mt-2 text-gray-600">Genero: {libro.idGenero}</div>
+            <div className="mt-2 text-gray-600">Genero: {generosMap[libro.idGenero]}</div>
             <div className="flex items-center mt-2">
             {estrellas.map((_, index) => (
                 <HiOutlineStar

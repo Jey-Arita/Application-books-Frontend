@@ -11,11 +11,11 @@ export const useDeleteAutor = () => {
     try {
       await deleteAutor(id);
       setIsLoading(false);
-      return true; // Retorna true si se eliminó con éxito
+      return true; 
     } catch (err) {
       setError("Error al eliminar el autor");
       setIsLoading(false);
-      return false; // Retorna false en caso de error
+      return false; 
     }
   };
 

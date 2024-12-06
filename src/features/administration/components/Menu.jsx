@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { BsFileEarmarkPersonFill } from "react-icons/bs";
 import { FaTags, FaUsers } from "react-icons/fa6";
 import { ImBooks, ImExit } from "react-icons/im";
+import { MdDashboard } from "react-icons/md";
 
 export const Menu = () => {
   return (
@@ -20,15 +21,22 @@ export const Menu = () => {
 
       {/* Sección de Administración */}
       <div className="py-2 border-t border-gray-200">
+      <Link
+          to="/admin/dashboard"
+          className="flex items-center px-6 py-3 text-xl font-medium text-gray-800 hover:text-blue-500 hover:bg-blue-100 transition duration-200"
+        >
+          <MdDashboard className="w-6 h-6 mr-3 text-blue-500" />
+          Dashboard
+        </Link>
         <Link
-          to="/admin/autoraadmin"
+          to="/admin/autor"
           className="flex items-center px-6 py-3 text-xl font-medium text-gray-800 hover:text-blue-500 hover:bg-blue-100 transition duration-200"
         >
           <BsFileEarmarkPersonFill className="w-6 h-6 mr-3 text-blue-500" />
           Autores
         </Link>
         <Link
-          to="/admin/libroadmin"
+          to="/admin/libro"
           className="flex items-center px-6 py-3 text-xl font-medium text-gray-800 hover:text-blue-500 hover:bg-blue-100 transition duration-200"
         >
           <ImBooks className="w-6 h-6 mr-3 text-green-500" />
