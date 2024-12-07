@@ -9,3 +9,12 @@ export const enviarCalificacion = async (newRatio) => {
         return error.response;
     }
 };
+export const obtenerCalificacionUsuario = async (idLibro) => {
+    try {
+      const {data} = await appApi.get(`/calificacion/${idLibro}`);
+      return data;
+    } catch (error) {
+        console.error(error);
+        return error.response;
+    }
+  };

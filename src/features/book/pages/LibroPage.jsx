@@ -7,7 +7,7 @@ import { useAutor, useGeneroList } from "../hooks";
 import { useComentario } from "../hooks/useComentario";
 import LibroPageSkeleton from "../components/LibroPageSkeleton";
 import { Comenta } from "../components";
-import { enviarCalificacion } from "../../../shared/actions/Calificacion/calificacion";
+import { enviarCalificacion, obtenerCalificacionUsuario } from "../../../shared/actions/Calificacion/calificacion"; // Nueva función
 
 export const LibroPage = () => {
   const { id } = useParams(); // Obtener el id dinámico de la URL
@@ -17,7 +17,8 @@ export const LibroPage = () => {
   const { autor, isLoading: isLoadingAutor, loadAutor } = useAutor(libro?.idAutor);
 
   const [isFavorito, setIsFavorito] = useState(false);
-  const [ratio, setRatio] = useState(0);
+  const [ratio, setRatio] = useState(0); // Estrellas seleccionadas por el usuario
+  const [userCalificado, setUserCalificado] = useState(false); // Nuevo estado
 
   const { generos, loadGenero } = useGeneroList();
   const [generosMap, setGenerosMap] = useState({});
@@ -52,21 +53,46 @@ export const LibroPage = () => {
     }
   }, [libro]);
 
+  useEffect(() => {
+    // Cargar la calificación del usuario al cargar el libro
+    const cargarCalificacionUsuario = async () => {
+      try {
+        const calificacion = await obtenerCalificacionUsuario(id); // Llamar a la API
+        if (calificacion?.data?.puntuacion) {
+          setRatio(calificacion.data.puntuacion); // Ajustar las estrellas
+          setUserCalificado(true); // Marcar como calificado
+        }
+      } catch (error) {
+        console.error("Error al cargar la calificación del usuario:", error);
+      }
+    };
+
+    if (id) {
+      cargarCalificacionUsuario();
+    }
+  }, [id]);
+
   const handleFavoritoClick = () => {
     setIsFavorito((prevFavorito) => !prevFavorito);
   };
 
   const handleLibroRatio = async (newRatio) => {
+    if (userCalificado) {
+      alert("Ya has calificado este libro.");
+      return;
+    }
+
     setRatio(newRatio);
 
     const dtoCalificacion = {
-      idLibro: libro?.id || '',
+      idLibro: libro?.id || "",
       puntuacion: newRatio,
     };
 
     try {
       await enviarCalificacion(dtoCalificacion);
       console.log("Calificación enviada exitosamente");
+      setUserCalificado(true); // Marcar como calificado tras enviar
     } catch (err) {
       console.error("Error al enviar la calificación", err);
     }
