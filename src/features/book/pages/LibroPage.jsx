@@ -13,9 +13,7 @@ export const LibroPage = () => {
   const { id } = useParams(); // Obtener el id dinámico de la URL
   const { libro, isLoading, loadLibro } = useLibro(id); // Obtener información del libro
   const { comentarios, isLoading: isLoadingComentarios } = useComentario(id);
-
   const { autor, isLoading: isLoadingAutor, loadAutor } = useAutor(libro?.idAutor);
-
   const [isFavorito, setIsFavorito] = useState(false);
   const [ratio, setRatio] = useState(0); // Estrellas seleccionadas por el usuario
   const [userCalificado, setUserCalificado] = useState(false); // Nuevo estado
