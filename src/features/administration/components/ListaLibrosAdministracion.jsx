@@ -39,6 +39,8 @@ export const ListaLibrosAdministracion = ({ onEditLibro, onDeleteLibro }) => {
 
   useEffect(() => {
     loadLibros(searchTerm, currentPage);
+    console.log({loadLibros});
+    
   }, [loadLibros, searchTerm, currentPage]);
 
   // Manejo de páginas anterior y siguiente
@@ -72,6 +74,7 @@ export const ListaLibrosAdministracion = ({ onEditLibro, onDeleteLibro }) => {
             <CiSearch className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" />
             <input
               type="search"
+              name="libro"
               placeholder="Buscar libros..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}

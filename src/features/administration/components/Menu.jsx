@@ -43,7 +43,7 @@ export const Menu = () => {
           Libros
         </Link>
         <Link
-          to="#"
+          to="/admin/genero"
           className="flex items-center px-6 py-3 text-xl font-medium text-gray-800 hover:text-blue-500 hover:bg-blue-100 transition duration-200"
         >
           <FaTags className="w-6 h-6 mr-3 text-rose-500" />

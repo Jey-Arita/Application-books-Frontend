@@ -2,7 +2,7 @@ import { Navigate, Route, Routes } from "react-router-dom"
 import { Footer, Nav } from "../../book/components"
 import { Menu } from "../components"
 import { AdministracionAutor } from "../pages/AdministracionAutor"
-import { AdministracionLibro, DashboardAdmin } from "../pages"
+import { AdministracionGenero, AdministracionLibro, DashboardAdmin } from "../pages"
 
 
 export const AdministracionRouter = () => {
@@ -16,6 +16,8 @@ export const AdministracionRouter = () => {
               <Route path='/autor' element={<AdministracionAutor />} />
               <Route path='/libro' element={<AdministracionLibro/>}/>
               <Route path='/dashboard' element={<DashboardAdmin />}/>
+              <Route path='/genero' element={<AdministracionGenero />}/>
+
 
             </Routes>
           </div>
