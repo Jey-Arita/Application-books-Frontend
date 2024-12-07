@@ -8,5 +8,5 @@ export * from './AutorListSkeleton'
 export * from './LibroPageSkeleton'
 export * from './FondoLibros'
 export * from './Paypal'
-
+export * from './pdfVista'
 

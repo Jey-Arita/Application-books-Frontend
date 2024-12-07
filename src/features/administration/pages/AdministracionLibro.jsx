@@ -22,7 +22,7 @@ export const AdministracionLibro = () => {
   const { eliminarLibro } = useDeleteLibro();
   const { autores, loadAutores } = useAutor();
   const { generos, loadGenero } = useGeneroList();
-  const {libro, isLoading} = useLibros(libroSeleccionado?.id);
+  const { libro, isLoading } = useLibros(libroSeleccionado?.id);
 
   const formik = useFormik({
     initialValues: crearInitLibro,
@@ -56,11 +56,11 @@ export const AdministracionLibro = () => {
     setModalVisible(true);
   };
 
-
   const abrirModalEdicion = (id) => {
     setLibroSeleccionado({ id }); // Establece el id del libro para cargar sus detalles
     setModalVisible(true); // Muestra el modal de edición
-};
+  };
+
   const cerrarModal = () => {
     setModalVisible(false);
     setLibroSeleccionado(null);
@@ -84,6 +84,7 @@ export const AdministracionLibro = () => {
       });
     }
   }, [libro, libroSeleccionado?.id]);
+
   return (
     <div className="container p-8 bg-gray-50 min-h-screen">
       <div className="mx-auto">
@@ -104,7 +105,7 @@ export const AdministracionLibro = () => {
         />
 
         {/* Modal de Edición/Creación */}
-        {modalVisible && libroSeleccionado?.id && (
+        {modalVisible && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
             <div className="bg-white p-8 rounded-lg w-full max-w-2xl relative max-h-[90vh] overflow-y-auto">
               <button
@@ -250,9 +251,9 @@ export const AdministracionLibro = () => {
                 </div>
 
                 {/* Descripción */}
-                <div className="col-span-2">
+                <div className="md:col-span-2">
                   <label className="flex items-center text-lg font-medium text-gray-700">
-                    <MdDescription className="mr-2 text-green-500" />
+                    <MdDescription className="mr-2 text-blue-500" />
                     Descripción
                   </label>
                   <textarea
@@ -260,8 +261,8 @@ export const AdministracionLibro = () => {
                     value={formik.values.descripcion}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
-                    placeholder="Descripción"
-                    className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    placeholder="Descripción del Libro"
+                    className="w-full h-32 px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                   />
                   {formik.touched.descripcion && formik.errors.descripcion && (
                     <p className="text-red-500 text-sm mt-1">
@@ -270,19 +271,18 @@ export const AdministracionLibro = () => {
                   )}
                 </div>
 
-                {/* Botones de acción */}
-                <div className="col-span-2 flex justify-end space-x-4">
+                <div className="md:col-span-2 flex justify-end gap-4 mt-6">
                   <button
                     type="button"
                     onClick={cerrarModal}
-                    className="px-4 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400"
+                    className="bg-gray-500 text-white py-2 px-4 rounded-md hover:bg-gray-600"
                   >
                     Cancelar
                   </button>
                   <button
                     type="submit"
-                    disabled={isLoadingEdit}
-                    className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:opacity-50"
+                    disabled={isLoading || isLoadingEdit}
+                    className="bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600"
                   >
                     {libroSeleccionado ? "Guardar Cambios" : "Añadir Libro"}
                   </button>

@@ -39,8 +39,6 @@ export const ListaLibrosAdministracion = ({ onEditLibro, onDeleteLibro }) => {
 
   useEffect(() => {
     loadLibros(searchTerm, currentPage);
-    console.log({loadLibros});
-    
   }, [loadLibros, searchTerm, currentPage]);
 
   // Manejo de páginas anterior y siguiente
@@ -110,7 +108,7 @@ export const ListaLibrosAdministracion = ({ onEditLibro, onDeleteLibro }) => {
               <h2 className="text-xl font-bold text-gray-800 mb-2">
                 {libro.titulo}
               </h2>
-              <p className="text-sm text-gray-600 mb-4">{libro.descripcion}</p>
+              <p className="text-gray-600 line-clamp-3">{libro.descripcion}</p>
               <p className="text-md text-gray-700 font-semibold">
                 Autor: {autoresMap[libro.idAutor]}
               </p>

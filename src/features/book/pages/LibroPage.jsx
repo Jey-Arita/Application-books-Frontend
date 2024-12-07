@@ -6,17 +6,25 @@ import { useLibro } from "../hooks/useLibro";
 import { useAutor, useGeneroList } from "../hooks";
 import { useComentario } from "../hooks/useComentario";
 import LibroPageSkeleton from "../components/LibroPageSkeleton";
-import { Comenta } from "../components";
-import { enviarCalificacion, obtenerCalificacionUsuario } from "../../../shared/actions/Calificacion/calificacion"; // Nueva función
+import { Comenta, PdfVista } from "../components";
+import {
+  enviarCalificacion,
+  obtenerCalificacionUsuario,
+} from "../../../shared/actions/Calificacion/calificacion"; // Nueva función
 
 export const LibroPage = () => {
   const { id } = useParams(); // Obtener el id dinámico de la URL
   const { libro, isLoading, loadLibro } = useLibro(id); // Obtener información del libro
   const { comentarios, isLoading: isLoadingComentarios } = useComentario(id);
-  const { autor, isLoading: isLoadingAutor, loadAutor } = useAutor(libro?.idAutor);
+  const {
+    autor,
+    isLoading: isLoadingAutor,
+    loadAutor,
+  } = useAutor(libro?.idAutor);
   const [isFavorito, setIsFavorito] = useState(false);
   const [ratio, setRatio] = useState(0); // Estrellas seleccionadas por el usuario
   const [userCalificado, setUserCalificado] = useState(false); // Nuevo estado
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const { generos, loadGenero } = useGeneroList();
   const [generosMap, setGenerosMap] = useState({});
@@ -74,6 +82,8 @@ export const LibroPage = () => {
     setIsFavorito((prevFavorito) => !prevFavorito);
   };
 
+  const handleOpenPdf = () => setIsModalOpen(true);
+  const handleClosePdf = () => setIsModalOpen(false);
   const handleLibroRatio = async (newRatio) => {
     if (userCalificado) {
       alert("Ya has calificado este libro.");
@@ -124,12 +134,18 @@ export const LibroPage = () => {
         <div className="grid gap-6">
           <div>
             <h1 className="text-3xl font-bold text-blue-500">{libro.titulo}</h1>
-            <div className="mt-2 text-gray-600">Genero: {generosMap[libro.idGenero]}</div>
+            <div className="mt-2 text-gray-600">
+              Genero: {generosMap[libro.idGenero]}
+            </div>
             <div className="flex items-center mt-2">
               {estrellas.map((_, index) => (
                 <HiOutlineStar
                   key={index}
-                  className={`w-6 h-6 ${index < estrellasLlenas ? "text-yellow-500" : "text-gray-300"}`}
+                  className={`w-6 h-6 ${
+                    index < estrellasLlenas
+                      ? "text-yellow-500"
+                      : "text-gray-300"
+                  }`}
                 />
               ))}
             </div>
@@ -153,16 +169,36 @@ export const LibroPage = () => {
               <p>No se encontró el autor</p>
             )}
           </div>
+          {/* Botón para abrir PDF */}
+          <div className="mt-4">
+            <button
+              onClick={handleOpenPdf}
+              className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-all duration-300"
+            >
+              Ver PDF
+            </button>
+          </div>
+
+          {/* Modal de PDF */}
+          <PdfVista
+            isOpen={isModalOpen}
+            closeModal={handleClosePdf}
+            pdfUrl={libro.urlPdf}
+            className="max-w-7xl w-full h-[80vh]"
+          />
 
           {/* Sección para calificar */}
           <div className="mt-4">
-            <h2 className="text-xl font-semibold text-blue-600">Calificar Libro</h2>
+            <h2 className="text-xl font-semibold text-blue-600">
+              Calificar Libro
+            </h2>
             <div className="flex items-center gap-1 mt-2">
               {Array.from({ length: 5 }, (_, i) => (
                 <HiOutlineStar
                   key={i}
-                  className={`w-6 h-6 cursor-pointer transition-transform duration-300 ${i < ratio ? "text-yellow-500 scale-125" : "text-gray-300"
-                    }`}
+                  className={`w-6 h-6 cursor-pointer transition-transform duration-300 ${
+                    i < ratio ? "text-yellow-500 scale-125" : "text-gray-300"
+                  }`}
                   onClick={() => handleLibroRatio(i + 1)}
                 />
               ))}
@@ -173,13 +209,15 @@ export const LibroPage = () => {
           <div className="mt-6">
             <button
               type="button"
-              className={`flex items-center h-9 text-blue-600 hover:text-blue-800 transition-colors duration-200 ${isFavorito ? "text-rose-500" : ""
-                }`}
+              className={`flex items-center h-9 text-blue-600 hover:text-blue-800 transition-colors duration-200 ${
+                isFavorito ? "text-rose-500" : ""
+              }`}
               onClick={handleFavoritoClick}
             >
               <BsHeart
-                className={`w-4 h-4 mr-2 transition-transform duration-200 transform hover:scale-125 ${isFavorito ? "fill-current text-rose-500" : ""
-                  }`}
+                className={`w-4 h-4 mr-2 transition-transform duration-200 hover:scale-125 ${
+                  isFavorito ? "fill-current text-rose-500" : ""
+                }`}
               />
               {isFavorito ? "Favorito" : "Agregar a Favoritos"}
             </button>
@@ -193,7 +231,9 @@ export const LibroPage = () => {
         <ul>
           {comentarios.map((comentario) => (
             <li key={comentario.id} className="py-4 border-b border-gray-300">
-              <p className="font-semibold text-gray-800">{comentario.nombreUsuario}</p>
+              <p className="font-semibold text-gray-800">
+                {comentario.nombreUsuario}
+              </p>
               <p>{comentario.comentario}</p>
             </li>
           ))}
