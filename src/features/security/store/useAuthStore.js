@@ -14,6 +14,8 @@ export const useAuthStore = create((set, get) => ({
       const {status, data, message, } = await loginAsync(form);
       
       if (status) {
+        const decodedJwt = jwtDecode(data.token);
+        const roles = decodedJwt["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"] ?? [];
         set({
           error: false,
           user: {
@@ -23,7 +25,8 @@ export const useAuthStore = create((set, get) => ({
           token: data.token,
           refreshToken: data.refreshToken,
           isAuthenticated: true,
-          message: message
+          message: message,
+          roles: typeof roles === "string" ? [roles] : roles,
         });
   
         localStorage.setItem('user', JSON.stringify(get().user ?? {}));

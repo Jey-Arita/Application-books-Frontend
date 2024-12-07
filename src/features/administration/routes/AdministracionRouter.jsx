@@ -17,8 +17,6 @@ export const AdministracionRouter = () => {
               <Route path='/libro' element={<AdministracionLibro/>}/>
               <Route path='/dashboard' element={<DashboardAdmin />}/>
               <Route path='/genero' element={<AdministracionGenero />}/>
-
-
             </Routes>
           </div>
         </div>

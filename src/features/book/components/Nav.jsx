@@ -16,9 +16,11 @@ import { GiBookPile } from "react-icons/gi";
 import { ProtectedComponent } from "../../../shared/components/ProtectedComponet";
 import { rolesListConstant } from "../../../shared/constants";
 import { RiAdminFill } from "react-icons/ri";
+import { useAuthStore } from "../../security/store";
 
 export const Nav = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const { isAuthenticated, logout } = useAuthStore();
 
   const handleSidebarToggle = () => {
     setIsSidebarOpen(!isSidebarOpen);
@@ -48,6 +50,13 @@ export const Nav = () => {
         {/* Enlaces para pantallas grandes */}
         <div className="hidden md:flex md:items-center">
           <Link
+            to={"/inicio"}
+            className="flex items-center text-white px-4 py-2 hover:bg-blue-600 transition-colors"
+          >
+            <GiBookPile className="w-8 h-8 mr-2" />
+            Inicio
+          </Link>
+          <Link
             to="/usuario"
             className="flex items-center text-white px-4 py-2 hover:bg-blue-600 transition-colors"
           >
@@ -58,7 +67,7 @@ export const Nav = () => {
               to="/admin/dashboard"
               className="flex items-center text-white px-4 py-2 hover:bg-blue-600 transition-colors"
             >
-             <RiAdminFill className="w-5 h-5 mr-2"/> Administración
+              <RiAdminFill className="w-5 h-5 mr-2" /> Administración
             </Link>
           </ProtectedComponent>
           <Link
@@ -79,14 +88,21 @@ export const Nav = () => {
           >
             <FaBook className="w-5 h-5 mr-2" /> Autores
           </Link>
+          {isAuthenticated && (
+            <button
+              onClick={logout}
+              className="flex items-center text-white px-4 py-2 hover:bg-red-500 transition-colors"
+            >
+              Cerrar Sesión
+            </button>
+          )}
         </div>
       </nav>
 
       {/* Sidebar */}
       <div
-        className={`fixed top-0 left-0 h-full bg-white shadow-lg transition-transform duration-300 z-50 ${
-          isSidebarOpen ? "translate-x-0" : "-translate-x-full"
-        }`}
+        className={`fixed top-0 left-0 h-full bg-white shadow-lg transition-transform duration-300 z-50 ${isSidebarOpen ? "translate-x-0" : "-translate-x-full"
+          }`}
         style={{ width: "250px" }}
       >
         <div className="h-14 border-b bg-gradient-to-br from-gray-600 to-blue-600 flex items-center px-4">
@@ -107,7 +123,7 @@ export const Nav = () => {
               to="/admin/autoraadmin"
               className="flex items-center w-full text-left py-2 hover:bg-gray-100 transition-colors"
             >
-             <RiAdminFill className="w-5 h-5 mr-2"/>  Administración
+              <RiAdminFill className="w-5 h-5 mr-2" />  Administración
             </Link>
           </ProtectedComponent>
 
@@ -118,9 +134,9 @@ export const Nav = () => {
             <FaUser className="w-5 h-5 mr-2" /> Perfil
           </Link>
 
-          <Link 
-          to="/genero"
-          className="flex items-center w-full text-left py-2 hover:bg-gray-100 transition-colors">
+          <Link
+            to="/genero"
+            className="flex items-center w-full text-left py-2 hover:bg-gray-100 transition-colors">
             <BiSolidCategory className="w-5 h-5 mr-2" /> Genero
           </Link>
 
