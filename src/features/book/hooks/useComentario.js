@@ -3,7 +3,7 @@ import { useState } from "react";
 import { addComentario, deleteComentario, getComentarioList } from "../../../shared/actions/comentarios/comentarios";
 
 export const useComentario = (idLibro) => {
-  const [comentario, setComentario] = useState([]);
+  const [comentarios, setComentario] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
 
@@ -50,7 +50,7 @@ export const useComentario = (idLibro) => {
   };
 
   return {
-    comentario,
+    comentarios,
     isLoading,
     error,
     loadComentario,

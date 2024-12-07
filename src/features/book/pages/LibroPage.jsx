@@ -4,12 +4,16 @@ import { HiOutlineStar } from "react-icons/hi";
 import { BsHeart } from "react-icons/bs";
 import { useLibro } from "../hooks/useLibro";
 import { useAutor, useGeneroList } from "../hooks";
+import { useComentario } from "../hooks/useComentario";  // Importa el nuevo hook
 import LibroPageSkeleton from "../components/LibroPageSkeleton";
 import { Comenta } from "../components";
 
 export const LibroPage = () => {
   const { id } = useParams(); // Obtén el id de la URL
   const { libro, isLoading, loadLibro } = useLibro(id); // Usa el hook personalizado
+  const { comentarios, isLoading: isLoadingComentarios } = useComentario(id);
+
+
   const {
     autor,
     isLoading: isLoadingAutor,
@@ -19,16 +23,16 @@ export const LibroPage = () => {
   const [isFavorito, setIsFavorito] = useState(false);
   const [ratio, setRatio] = useState(0);
 
-  const { generos, loadGenero} = useGeneroList();
+  const { generos, loadGenero } = useGeneroList();
   const [generosMap, setGenerosMap] = useState({});
   useEffect(() => {
-    loadGenero(); 
+    loadGenero();
   }, []);
 
   useEffect(() => {
     // Crea un mapa de ID a nombre de genero
     const generoMap = generos.reduce((map, genero) => {
-      map[genero.id] = genero.nombre; 
+      map[genero.id] = genero.nombre;
       return map;
     }, {});
     setGenerosMap(generoMap);
@@ -56,13 +60,14 @@ export const LibroPage = () => {
     setRatio(newRatio);
   };
 
-  if (isLoading || isLoadingAutor) {
-    return <LibroPageSkeleton/>;
+  if (isLoading || isLoadingAutor || isLoadingComentarios) {
+    return <LibroPageSkeleton />;
   }
 
   if (!libro) {
     return <p>No se encontraron detalles para este libro.</p>;
   }
+
   const estrellasLlenas = Math.round(libro.promedio) || 0;
   const estrellas = Array(5).fill(null);
 
@@ -84,7 +89,7 @@ export const LibroPage = () => {
             <h1 className="text-3xl font-bold text-blue-500">{libro.titulo}</h1>
             <div className="mt-2 text-gray-600">Genero: {generosMap[libro.idGenero]}</div>
             <div className="flex items-center mt-2">
-            {estrellas.map((_, index) => (
+              {estrellas.map((_, index) => (
                 <HiOutlineStar
                   key={index}
                   className={`w-6 h-6 ${index < estrellasLlenas ? "text-yellow-500" : "text-gray-300"}`}
@@ -119,15 +124,13 @@ export const LibroPage = () => {
             </Link>
             <button
               type="button"
-              className={`flex items-center h-9 mt-4 sm:mt-0 text-blue-600 hover:text-blue-800 transition-colors duration-200 ${
-                isFavorito ? "text-rose-500" : ""
-              }`}
+              className={`flex items-center h-9 mt-4 sm:mt-0 text-blue-600 hover:text-blue-800 transition-colors duration-200 ${isFavorito ? "text-rose-500" : ""
+                }`}
               onClick={handleFavoritoClick}
             >
               <BsHeart
-                className={`w-4 h-4 mr-2 transition-transform duration-200 transform hover:scale-125 ${
-                  isFavorito ? "fill-current text-rose-500" : ""
-                }`}
+                className={`w-4 h-4 mr-2 transition-transform duration-200 transform hover:scale-125 ${isFavorito ? "fill-current text-rose-500" : ""
+                  }`}
               />
               {isFavorito ? "Favorito" : "Agregar a Favoritos"}
             </button>
@@ -141,9 +144,8 @@ export const LibroPage = () => {
               {Array.from({ length: 5 }, (_, i) => (
                 <HiOutlineStar
                   key={i}
-                  className={`w-6 h-6 cursor-pointer transition-transform duration-300 ${
-                    i < ratio ? "text-yellow-500 scale-125" : "text-gray-300"
-                  }`}
+                  className={`w-6 h-6 cursor-pointer transition-transform duration-300 ${i < ratio ? "text-yellow-500 scale-125" : "text-gray-300"
+                    }`}
                   onClick={() => handleLibroRatio(i + 1)}
                 />
               ))}
@@ -152,7 +154,19 @@ export const LibroPage = () => {
         </div>
       </div>
       <div className="my-12 border-t border-gray-300" />
-       <Comenta libroId={libro.id} />  
+      {/* Sección de comentarios */}
+      <div className="mt-6">
+        <h2 className="text-2xl font-semibold text-blue-600">Comentarios</h2>
+          <ul>
+            {comentarios.map((comentario) => (
+              <li key={comentario.id} className="py-4 border-b border-gray-300">
+                <p className="font-semibold text-gray-800">{comentario.nombreUsuario}</p>
+                <p>{comentario.comentario}</p>
+              </li>
+            ))}
+          </ul>
+      </div>
+      <Comenta libroId={libro.id} />
     </div>
   );
 };

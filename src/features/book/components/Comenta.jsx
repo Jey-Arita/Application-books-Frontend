@@ -232,7 +232,6 @@ export const Comenta = ({ libroId }) => {
     <div>
       {error && <div className="text-red-500">{error}</div>}
       <div>
-        <h2 className="text-2xl font-bold mb-6 text-gray-800">Agregar Comentarios</h2>
         <form onSubmit={handleComentaSubmit} className="grid gap-4">
           <textarea
             className="w-full p-4 border-2 border-gray-300 rounded-md focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
