@@ -11,10 +11,15 @@ export const useComentario = (idLibro) => {
     setIsLoading(true);
     try {
       const result = await getComentarioList(idLibro);
-      setComentario(result.data);
+      if (result.data) {
+        setComentario(result.data); // Si se obtienen comentarios, los almacenamos
+      } else {
+        setComentario([]); // Si no hay comentarios, aseguramos que el estado esté vacío
+      }
       return result.data;
     } catch (err) {
       setError(err.message || "Error al cargar comentarios");
+      setComentario([]);
       return [];
     } finally {
       setIsLoading(false); // Esto asegura que siempre se actualice al final

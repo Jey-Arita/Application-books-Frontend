@@ -18,19 +18,18 @@ export const AdministracionLibro = () => {
   const { autores, loadAutores } = useAutor();
   const { generos, loadGenero } = useGeneroList();
 
-
-
   const formik = useFormik({
-    initialValues: crearInitLibro,
+    initialValues: modoEdicion ? modoEdicion : crearInitLibro,
     validationSchema: createLibroValidationSchema,
+    enableReinitialize: true,
     onSubmit: async (form) => {
       if (modoEdicion) {
         const result = await editarLibro(modoEdicion, form);
-        console.log(result);
         if (result) {
           // Si se actualiza correctamente, recarga la lista
           loadAutores();
           formik.resetForm();
+          setModoEdicion(null);
         }
       } else {
         await addLibro(form);
@@ -40,8 +39,8 @@ export const AdministracionLibro = () => {
   });
 
   const editarLibroHandler = async (libro) => {
-    setModoEdicion(libro.id);
-    formik.setValues(libro); // Establece valores en el formulario
+    const libroCompleto = await obtenerLibroPorId(libro.id); // Lógica para obtener datos del libro
+    setModoEdicion(libroCompleto); // Guarda el libro completo
   };
 
   const eliminarLibroHandler = async (id) => {
@@ -76,7 +75,7 @@ export const AdministracionLibro = () => {
               <input
                 type="text"
                 name="titulo"
-                value={formik.values.titulo || ""}
+                value={formik.values.titulo}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
                 placeholder="Título del Libro"

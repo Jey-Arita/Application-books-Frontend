@@ -1,15 +1,63 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { HiOutlineStar } from "react-icons/hi";
 import { Link } from "react-router-dom";
-import { FaCheckCircle } from "react-icons/fa";  // Ícono de check
+import { FaCheckCircle } from "react-icons/fa"; // Ícono de check
 import { Paypal } from "../components";
+import { jwtDecode } from "jwt-decode";
 
 export const UsuarioPages = () => {
+  const [error, setError] = useState("");
+  const [email, setEmail] = useState(null);
   const [isMembershipActive, setIsMembershipActive] = useState(false);
+  const [paypal, setPaypal] = useState(null);
+
 
   const toggleMembership = () => {
     setIsMembershipActive(!isMembershipActive);
   };
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      try {
+        const decodedToken = jwtDecode(token);
+        const email =
+          decodedToken[
+            "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress"
+          ];
+        if (email) {
+          setEmail(email);
+        } else {
+          setError("No se encontró el correo electrónico en el token.");
+        }
+      } catch (error) {
+        setError(
+          "Token inválido o expirado. Por favor, inicia sesión nuevamente."
+        );
+      }
+    } else {
+      setError("No se encontró el token de usuario. Por favor, inicia sesión.");
+    }
+  }, []);
+
+  useEffect(() => {
+    const pago = localStorage.getItem("__paypal_storage__");
+    console.log(pago);
+    
+    if (pago) {
+      try {
+        const decodedPago = jwtDecode(pago);
+          setPaypal(decodedPago.pago);
+    
+      } catch (error) {
+        setError(
+          "Token inválido o expirado. Por favor, inicia sesión nuevamente."
+        );
+      }
+    } else {
+      setError("No se encontró el token de usuario. Por favor, inicia sesión.");
+    }
+  }, []);
 
   return (
     <div className="w-full max-w-4xl mx-auto p-8 space-y-6 bg-gray-100">
@@ -18,8 +66,7 @@ export const UsuarioPages = () => {
           <div className="w-24 h-24 mb-2 bg-gray-300 rounded-full flex items-center justify-center shadow-lg">
             {/* Imagen del perfil */}
           </div>
-          <h1 className="text-2xl font-bold text-gray-800">Carlos García</h1>
-          <p className="text-muted-foreground">carlos@gmail.com</p>
+          <h1 className="text-2xl font-bold text-gray-800">{email}</h1>
         </div>
         <div className="flex flex-col sm:flex-row gap-2">
           <button className="border border-gray-300 px-4 py-2 rounded hover:bg-gray-200 transition duration-200">
@@ -60,7 +107,10 @@ export const UsuarioPages = () => {
         <h2 className="font-bold text-xl mb-4">Mis reseñas recientes</h2>
         <div className="space-y-4">
           {[1, 2, 3].map((review) => (
-            <div key={review} className="border rounded p-4 bg-gray-50 shadow-sm">
+            <div
+              key={review}
+              className="border rounded p-4 bg-gray-50 shadow-sm"
+            >
               <div className="flex items-center justify-between mb-2">
                 <Link className="font-semibold text-gray-800">
                   Título del libro {review}
@@ -69,7 +119,9 @@ export const UsuarioPages = () => {
                   {[1, 2, 3, 4, 5].map((star) => (
                     <span
                       key={star}
-                      className={`h-4 w-4 ${star <= review ? "text-yellow-400" : "text-gray-300"}`}
+                      className={`h-4 w-4 ${
+                        star <= review ? "text-yellow-400" : "text-gray-300"
+                      }`}
                     >
                       <HiOutlineStar />
                     </span>
