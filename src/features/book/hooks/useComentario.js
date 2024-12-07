@@ -9,20 +9,19 @@ export const useComentario = (idLibro) => {
 
   const loadComentario = async (idLibro) => {
     setIsLoading(true);
-try {
-  const result = await getComentarioList(idLibro);
-  setComentario(result.data);
-  console.log(result.data);
-  return result.data;
-} catch (err) {
-  setError(err.message || "Error al cargar comentarios");
-  return [];
-} finally {
-  setIsLoading(false); // Esto asegura que siempre se actualice al final
-}
+    try {
+      const result = await getComentarioList(idLibro);
+      setComentario(result.data);
+      return result.data;
+    } catch (err) {
+      setError(err.message || "Error al cargar comentarios");
+      return [];
+    } finally {
+      setIsLoading(false); // Esto asegura que siempre se actualice al final
+    }
 
   };
-  
+
 
   const sendComentario = async (newComentario) => {
     setIsLoading(true);
@@ -41,10 +40,10 @@ try {
       setIsLoading(false);
     }
   };
-  
+
   const deleteComentar = async (idComentario) => {
     setIsLoading(true);
-    setError(null);  
+    setError(null);
     const result = await deleteComentario(idComentario);
     setIsLoading(false);
     return { status: result?.status ?? false };

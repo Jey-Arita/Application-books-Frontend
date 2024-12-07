@@ -18,25 +18,22 @@ export const Comenta = ({ libroId }) => {
     if (token) {
       try {
         const decodedToken = jwtDecode(token);
-        console.log("Token decodificado:", decodedToken); // Inspecciona todo el token decodificado
-        setUserId(decodedToken.idUsuario);
-        console.log("userId extraído:", decodedToken.UserId);
+        setUserId(decodedToken.UserId);
       } catch (error) {
-        console.error("Error al decodificar el token", error);
         setError("Token inválido o expirado. Por favor, inicia sesión nuevamente.");
       }
     } else {
       setError("No se encontró el token de usuario. Por favor, inicia sesión.");
     }
   }, []);
-  
+
 
   useEffect(() => {
     if (libroId) {
       loadComentario(libroId).then((data) => {
         if (data && Array.isArray(data)) {
           // Filtramos duplicados antes de actualizar el estado
-          setComentarios(data.filter((comentario, index, self) => 
+          setComentarios(data.filter((comentario, index, self) =>
             index === self.findIndex((c) => c.id === comentario.id)
           ));
         }
@@ -66,12 +63,12 @@ export const Comenta = ({ libroId }) => {
 
     const result = await sendComentario(newComenta);
     if (result && result.status) {
-      setComenta(""); 
+      setComenta("");
       setError("");
       // Filtramos duplicados antes de actualizar el estado
       setComentarios((prev) => {
         const updatedComentarios = [result.data, ...prev];
-        return updatedComentarios.filter((comentario, index, self) => 
+        return updatedComentarios.filter((comentario, index, self) =>
           index === self.findIndex((c) => c.id === comentario.id)
         );
       });
@@ -97,7 +94,7 @@ export const Comenta = ({ libroId }) => {
 
     const result = await sendComentario(newRespuesta);
     if (result && result.status) {
-      setResponde(""); 
+      setResponde("");
       setRespondiendoId(null); // Resetear al terminar
       setComentarios((prev) =>
         prev.map((comenta) =>
@@ -116,15 +113,34 @@ export const Comenta = ({ libroId }) => {
       setError("Usuario no autenticado. No puedes eliminar comentarios.");
       return;
     }
+  
     const result = await deleteComentar(idComentario);
     if (result && result.status) {
-      setComentarios((prev) =>
-        prev.filter((comenta) => comenta.id !== idComentario)
-      );
+      setComentarios((prevComentarios) => {
+        // Función recursiva para eliminar una respuesta de forma anidada
+        const eliminarRespuesta = (comentarios) =>
+          comentarios.map((comenta) => {
+            if (comenta.respuestas) {
+              // Eliminar la respuesta de forma recursiva
+              return {
+                ...comenta,
+                respuestas: eliminarRespuesta(comenta.respuestas).filter(
+                  (respuesta) => respuesta.id !== idComentario
+                ),
+              };
+            }
+            return comenta;
+          });
+  
+        return eliminarRespuesta(prevComentarios).filter(
+          (comenta) => comenta.id !== idComentario
+        );
+      });
     } else {
       setError("Error al eliminar el comentario");
     }
   };
+  
 
   const toggleResponder = (id) => {
     setRespondiendoId((prev) => (prev === id ? null : id));
@@ -184,15 +200,16 @@ export const Comenta = ({ libroId }) => {
 
           {/* Mostrar el botón de eliminar solo si el comentario fue creado por el usuario autenticado */}
           {comenta.idUsuario === userId && (
-  <div className="mt-4 md:mt-0">
-    <button
-      onClick={() => handleDeleteComentario(comenta.id)}
-      className="inline-flex items-center justify-center px-5 py-2 text-sm font-medium text-white bg-red-600 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 hover:bg-red-700"
-    >
-      Eliminar
-    </button>
-  </div>
-)}
+            <div className="mt-4 md:mt-0">
+              <button
+                onClick={() => handleDeleteComentario(comenta.id)}
+                className="inline-flex items-center justify-center px-5 py-2 text-sm font-medium text-white bg-red-600 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 hover:bg-red-700"
+              >
+                Eliminar
+              </button>
+            </div>
+          )}
+
 
 
         </div>
