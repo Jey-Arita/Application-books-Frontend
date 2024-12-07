@@ -1,13 +1,16 @@
 import { useEffect, useState } from "react";
-import { MdOutlineDriveFileRenameOutline, MdDescription, MdClose } from "react-icons/md";
+import {
+  MdOutlineDriveFileRenameOutline,
+  MdDescription,
+  MdClose,
+} from "react-icons/md";
 import { FaFileImage, FaTags, FaLink } from "react-icons/fa";
 import { BsPerson } from "react-icons/bs";
 import { useFormik } from "formik";
-
 import { crearInitLibro, createLibroValidationSchema } from "../forms";
 import { useLibrosStore } from "../store";
 import { useEditLibro } from "../hooks/useEditLibro";
-import { useDeleteLibro } from "../hooks";
+import { useDeleteLibro, useLibros } from "../hooks";
 import { useAutor, useGeneroList } from "../../book/hooks";
 import { ListaLibrosAdministracion } from "../components";
 
@@ -19,7 +22,7 @@ export const AdministracionLibro = () => {
   const { eliminarLibro } = useDeleteLibro();
   const { autores, loadAutores } = useAutor();
   const { generos, loadGenero } = useGeneroList();
-  
+  const {libro, isLoading} = useLibros(libroSeleccionado?.id);
 
   const formik = useFormik({
     initialValues: crearInitLibro,
@@ -53,20 +56,11 @@ export const AdministracionLibro = () => {
     setModalVisible(true);
   };
 
-  const abrirModalEdicion = (libro) => {
-    console.log("Libro a editar:", libro);
-    setLibroSeleccionado(libro);
-    formik.setValues({
-      titulo: libro.titulo,
-      idGenero: libro.idGenero,
-      urlImg: libro.urlImg,
-      idAutor: libro.idAutor,
-      urlPdf: libro.urlPdf,
-      descripcion: libro.descripcion
-    });
-    setModalVisible(true);
-  };
 
+  const abrirModalEdicion = (id) => {
+    setLibroSeleccionado({ id }); // Establece el id del libro para cargar sus detalles
+    setModalVisible(true); // Muestra el modal de edición
+};
   const cerrarModal = () => {
     setModalVisible(false);
     setLibroSeleccionado(null);
@@ -78,16 +72,26 @@ export const AdministracionLibro = () => {
     loadAutores();
   }, [loadAutores]);
 
-  
-
+  useEffect(() => {
+    if (libroSeleccionado?.id && libro) {
+      formik.setValues({
+        titulo: libro.titulo || '',
+        idGenero: libro.idGenero || '',
+        urlImg: libro.urlImg || '',
+        idAutor: libro.idAutor || '',
+        urlPdf: libro.urlPdf || '',
+        descripcion: libro.descripcion || ''
+      });
+    }
+  }, [libro, libroSeleccionado?.id]);
   return (
     <div className="container p-8 bg-gray-50 min-h-screen">
       <div className="mx-auto">
         <h1 className="text-4xl font-extrabold mb-6 text-gray-800">
           Administración de Libros
         </h1>
-        
-        <button 
+
+        <button
           onClick={abrirModalCreacion}
           className="mb-4 px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600"
         >
@@ -95,26 +99,29 @@ export const AdministracionLibro = () => {
         </button>
 
         <ListaLibrosAdministracion
-          onEditLibro={(libro) => abrirModalEdicion(libro)} 
+          onEditLibro={(libro) => abrirModalEdicion(libro)}
           onDeleteLibro={eliminarLibro}
         />
 
         {/* Modal de Edición/Creación */}
-        {modalVisible && (
+        {modalVisible && libroSeleccionado?.id && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
             <div className="bg-white p-8 rounded-lg w-full max-w-2xl relative max-h-[90vh] overflow-y-auto">
-              <button 
-                onClick={cerrarModal} 
+              <button
+                onClick={cerrarModal}
                 className="absolute top-4 right-4 text-gray-600 hover:text-gray-900"
               >
                 <MdClose size={24} />
               </button>
 
               <h2 className="text-2xl font-bold mb-6">
-                {libroSeleccionado ? 'Editar Libro' : 'Añadir Nuevo Libro'}
+                {libroSeleccionado ? "Editar Libro" : "Añadir Nuevo Libro"}
               </h2>
 
-              <form onSubmit={formik.handleSubmit} className="grid md:grid-cols-2 gap-6">
+              <form
+                onSubmit={formik.handleSubmit}
+                className="grid md:grid-cols-2 gap-6"
+              >
                 {/* Título */}
                 <div>
                   <label className="flex items-center text-lg font-medium text-gray-700">
@@ -124,7 +131,7 @@ export const AdministracionLibro = () => {
                   <input
                     type="text"
                     name="titulo"
-                    value={formik.values.titulo ?? ''}
+                    value={formik.values.titulo ?? ""}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
                     placeholder="Título del Libro"
@@ -277,7 +284,7 @@ export const AdministracionLibro = () => {
                     disabled={isLoadingEdit}
                     className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:opacity-50"
                   >
-                    {libroSeleccionado ? 'Guardar Cambios' : 'Añadir Libro'}
+                    {libroSeleccionado ? "Guardar Cambios" : "Añadir Libro"}
                   </button>
                 </div>
               </form>
