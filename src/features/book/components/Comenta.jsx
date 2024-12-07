@@ -209,9 +209,6 @@ export const Comenta = ({ libroId }) => {
               </button>
             </div>
           )}
-
-
-
         </div>
 
         {/* Respuestas anidadas */}

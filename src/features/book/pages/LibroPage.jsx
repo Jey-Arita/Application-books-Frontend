@@ -4,33 +4,29 @@ import { HiOutlineStar } from "react-icons/hi";
 import { BsHeart } from "react-icons/bs";
 import { useLibro } from "../hooks/useLibro";
 import { useAutor, useGeneroList } from "../hooks";
-import { useComentario } from "../hooks/useComentario";  // Importa el nuevo hook
+import { useComentario } from "../hooks/useComentario";
 import LibroPageSkeleton from "../components/LibroPageSkeleton";
 import { Comenta } from "../components";
+import { enviarCalificacion } from "../../../shared/actions/Calificacion/calificacion";
 
 export const LibroPage = () => {
-  const { id } = useParams(); // Obtén el id de la URL
-  const { libro, isLoading, loadLibro } = useLibro(id); // Usa el hook personalizado
+  const { id } = useParams(); // Obtener el id dinámico de la URL
+  const { libro, isLoading, loadLibro } = useLibro(id); // Obtener información del libro
   const { comentarios, isLoading: isLoadingComentarios } = useComentario(id);
 
-
-  const {
-    autor,
-    isLoading: isLoadingAutor,
-    loadAutor,
-  } = useAutor(libro?.idAutor);
+  const { autor, isLoading: isLoadingAutor, loadAutor } = useAutor(libro?.idAutor);
 
   const [isFavorito, setIsFavorito] = useState(false);
   const [ratio, setRatio] = useState(0);
 
   const { generos, loadGenero } = useGeneroList();
   const [generosMap, setGenerosMap] = useState({});
+
   useEffect(() => {
     loadGenero();
   }, []);
 
   useEffect(() => {
-    // Crea un mapa de ID a nombre de genero
     const generoMap = generos.reduce((map, genero) => {
       map[genero.id] = genero.nombre;
       return map;
@@ -38,7 +34,6 @@ export const LibroPage = () => {
     setGenerosMap(generoMap);
   }, [generos]);
 
-  // Cargar los detalles del libro al montar el componente
   useEffect(() => {
     if (id) {
       loadLibro(id);
@@ -51,13 +46,30 @@ export const LibroPage = () => {
     }
   }, [libro]);
 
+  useEffect(() => {
+    if (libro) {
+      setRatio(libro?.puntuacion || 0); // Ajustar el ratio con la puntuación actual del libro
+    }
+  }, [libro]);
+
   const handleFavoritoClick = () => {
-    setIsFavorito(!isFavorito);
+    setIsFavorito((prevFavorito) => !prevFavorito);
   };
 
-  // Manejador para calificar el libro
-  const handleLibroRatio = (newRatio) => {
+  const handleLibroRatio = async (newRatio) => {
     setRatio(newRatio);
+
+    const dtoCalificacion = {
+      idLibro: libro?.id || '',
+      puntuacion: newRatio,
+    };
+
+    try {
+      await enviarCalificacion(dtoCalificacion);
+      console.log("Calificación enviada exitosamente");
+    } catch (err) {
+      console.error("Error al enviar la calificación", err);
+    }
   };
 
   if (isLoading || isLoadingAutor || isLoadingComentarios) {
@@ -74,6 +86,7 @@ export const LibroPage = () => {
   return (
     <div className="max-w-6xl mx-auto px-4 py-14 sm:px-6 lg:px-8 bg-gray-100">
       <div className="grid md:grid-cols-2 gap-8">
+        {/* Imagen del libro */}
         <div>
           <img
             src={libro.urlImg}
@@ -97,49 +110,29 @@ export const LibroPage = () => {
               ))}
             </div>
           </div>
+
           <div className="prose max-w-none text-gray-800">
             <p>{libro.descripcion}</p>
-            <div className="grid gap-2 py-4">
-              <h2 className="text-3xl font-bold text-blue-600">Autor</h2>
-              {autor ? (
-                <Link
-                  to={`/autor/${libro.idAutor}`}
-                  className="font-semibold text-gray-600 hover:text-rose-500"
-                >
-                  {autor.nombreAutor}
-                </Link>
-              ) : (
-                <p>No se encontró el autor</p>
-              )}
-            </div>
           </div>
-          <div className="mt-1 flex flex-col sm:flex-row sm:gap-3">
-            <Link
-              to={libro.urlPdf}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex h-9 items-center justify-center rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow transition-colors hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
-            >
-              Leer Libro en Nueva Pestaña
-            </Link>
-            <button
-              type="button"
-              className={`flex items-center h-9 mt-4 sm:mt-0 text-blue-600 hover:text-blue-800 transition-colors duration-200 ${isFavorito ? "text-rose-500" : ""
-                }`}
-              onClick={handleFavoritoClick}
-            >
-              <BsHeart
-                className={`w-4 h-4 mr-2 transition-transform duration-200 transform hover:scale-125 ${isFavorito ? "fill-current text-rose-500" : ""
-                  }`}
-              />
-              {isFavorito ? "Favorito" : "Agregar a Favoritos"}
-            </button>
+
+          {/* Autor */}
+          <div className="grid gap-2 py-4">
+            <h2 className="text-3xl font-bold text-blue-600">Autor</h2>
+            {autor ? (
+              <Link
+                to={`/autor/${libro.idAutor}`}
+                className="font-semibold text-gray-600 hover:text-rose-500"
+              >
+                {autor.nombreAutor}
+              </Link>
+            ) : (
+              <p>No se encontró el autor</p>
+            )}
           </div>
-          {/* Sección para calificar el libro */}
+
+          {/* Sección para calificar */}
           <div className="mt-4">
-            <h2 className="text-xl font-semibold text-blue-600">
-              Calificar Libro
-            </h2>
+            <h2 className="text-xl font-semibold text-blue-600">Calificar Libro</h2>
             <div className="flex items-center gap-1 mt-2">
               {Array.from({ length: 5 }, (_, i) => (
                 <HiOutlineStar
@@ -151,22 +144,38 @@ export const LibroPage = () => {
               ))}
             </div>
           </div>
+
+          {/* Favoritos */}
+          <div className="mt-6">
+            <button
+              type="button"
+              className={`flex items-center h-9 text-blue-600 hover:text-blue-800 transition-colors duration-200 ${isFavorito ? "text-rose-500" : ""
+                }`}
+              onClick={handleFavoritoClick}
+            >
+              <BsHeart
+                className={`w-4 h-4 mr-2 transition-transform duration-200 transform hover:scale-125 ${isFavorito ? "fill-current text-rose-500" : ""
+                  }`}
+              />
+              {isFavorito ? "Favorito" : "Agregar a Favoritos"}
+            </button>
+          </div>
         </div>
       </div>
-      <div className="my-12 border-t border-gray-300" />
-      {/* Sección de comentarios */}
+
+      {/* Comentarios */}
       <div className="mt-6">
         <h2 className="text-2xl font-semibold text-blue-600">Comentarios</h2>
-          <ul>
-            {comentarios.map((comentario) => (
-              <li key={comentario.id} className="py-4 border-b border-gray-300">
-                <p className="font-semibold text-gray-800">{comentario.nombreUsuario}</p>
-                <p>{comentario.comentario}</p>
-              </li>
-            ))}
-          </ul>
+        <ul>
+          {comentarios.map((comentario) => (
+            <li key={comentario.id} className="py-4 border-b border-gray-300">
+              <p className="font-semibold text-gray-800">{comentario.nombreUsuario}</p>
+              <p>{comentario.comentario}</p>
+            </li>
+          ))}
+        </ul>
+        <Comenta libroId={libro.id} />
       </div>
-      <Comenta libroId={libro.id} />
     </div>
   );
 };

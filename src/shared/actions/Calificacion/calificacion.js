@@ -1,6 +1,8 @@
-export const addCalifiacion = async (newCalifiacion) => {
+import { appApi } from "../../../config/api";
+
+export const enviarCalificacion = async (newRatio) => {
     try {
-        const { data } = await appApi.post(`/calificacion`, newCalifiacion);
+        const { data } = await appApi.post(`/calificacion`, newRatio);
         return data;
     } catch (error) {
         console.error(error);
