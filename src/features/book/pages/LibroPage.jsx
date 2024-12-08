@@ -60,23 +60,25 @@ export const LibroPage = () => {
   }, [libro]);
 
   useEffect(() => {
-    // Cargar la calificación del usuario al cargar el libro
     const cargarCalificacionUsuario = async () => {
       try {
         const calificacion = await obtenerCalificacionUsuario(id); // Llamar a la API
         if (calificacion?.data?.puntuacion) {
           setRatio(calificacion.data.puntuacion); // Ajustar las estrellas
           setUserCalificado(true); // Marcar como calificado
+        } else {
+          setRatio(libro?.promedio || 0); // Mostrar promedio si el usuario no ha calificado
         }
       } catch (error) {
         console.error("Error al cargar la calificación del usuario:", error);
       }
     };
-
+  
     if (id) {
       cargarCalificacionUsuario();
     }
-  }, [id]);
+  }, [id, libro?.promedio]); // Agregar libro.promedio como dependencia
+  
 
   const handleFavoritoClick = () => {
     setIsFavorito((prevFavorito) => !prevFavorito);
@@ -85,27 +87,23 @@ export const LibroPage = () => {
   const handleOpenPdf = () => setIsModalOpen(true);
   const handleClosePdf = () => setIsModalOpen(false);
   const handleLibroRatio = async (newRatio) => {
-    if (userCalificado) {
-      alert("Ya has calificado este libro.");
-      return;
-    }
-
+    // Actualizar la puntuación en el estado local inmediatamente
     setRatio(newRatio);
-
+  
     const dtoCalificacion = {
       idLibro: libro?.id || "",
       puntuacion: newRatio,
     };
-
+  
     try {
-      await enviarCalificacion(dtoCalificacion);
+      await enviarCalificacion(dtoCalificacion); // Enviar la nueva calificación
       console.log("Calificación enviada exitosamente");
-      setUserCalificado(true); // Marcar como calificado tras enviar
+      setUserCalificado(true); // Asegurar que el estado refleje que el libro está calificado
     } catch (err) {
       console.error("Error al enviar la calificación", err);
     }
   };
-
+  
   if (isLoading || isLoadingAutor || isLoadingComentarios) {
     return <LibroPageSkeleton />;
   }
