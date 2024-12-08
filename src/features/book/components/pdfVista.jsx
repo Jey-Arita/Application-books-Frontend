@@ -5,7 +5,7 @@ export const PdfVista = ({ isOpen, closeModal, pdfUrl }) => {
   
     return (
       <div
-        className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-100 py-8"
+        className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-[9999] py-8"
         onClick={closeModal}
       >
         <div

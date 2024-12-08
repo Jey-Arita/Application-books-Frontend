@@ -141,7 +141,7 @@ export const LibroPage = () => {
               {estrellas.map((_, index) => (
                 <HiOutlineStar
                   key={index}
-                  className={`w-6 h-6 ${
+                  className={`w-6 h-6  ${
                     index < estrellasLlenas
                       ? "text-yellow-500"
                       : "text-gray-300"
@@ -178,13 +178,13 @@ export const LibroPage = () => {
               Ver PDF
             </button>
           </div>
-
+ 
           {/* Modal de PDF */}
           <PdfVista
             isOpen={isModalOpen}
             closeModal={handleClosePdf}
             pdfUrl={libro.urlPdf}
-            className="max-w-7xl w-full h-[80vh]"
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50"
           />
 
           {/* Sección para calificar */}
@@ -196,8 +196,8 @@ export const LibroPage = () => {
               {Array.from({ length: 5 }, (_, i) => (
                 <HiOutlineStar
                   key={i}
-                  className={`w-6 h-6 cursor-pointer transition-transform duration-300 ${
-                    i < ratio ? "text-yellow-500 scale-125" : "text-gray-300"
+                  className={`w-6 h-6 ${
+                    i < ratio ? "text-yellow-500 scale-100" : "text-gray-300"
                   }`}
                   onClick={() => handleLibroRatio(i + 1)}
                 />

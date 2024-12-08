@@ -1,19 +1,70 @@
-import { useEffect, useState } from "react";
-import { HiOutlineStar } from "react-icons/hi";
-import { Link } from "react-router-dom";
-import { FaCheckCircle } from "react-icons/fa"; // Ícono de check
+import React, { useEffect, useState } from "react";
+import { HiBookOpen, HiUser } from "react-icons/hi";
+import { FaCalendarAlt, FaCrown } from "react-icons/fa";
 import { Paypal } from "../components";
 import { jwtDecode } from "jwt-decode";
+import { useMembresiaStore } from "../store";
+import { useFormik } from "formik";
+import { crearInitMembresia, createMembresiaValidationSchema } from "../forms";
+import { FaCheck, FaClock, FaHeart, FaTrash, FaTrophy } from "react-icons/fa6";
+import { useMembresia } from "../hooks";
+import { ImBooks } from "react-icons/im";
+import { TbCreditCardPay } from "react-icons/tb";
+import { Link } from "react-router-dom";
 
 export const UsuarioPages = () => {
   const [error, setError] = useState("");
   const [email, setEmail] = useState(null);
+  const [membershipType, setMembershipType] = useState("Gratis");
+  const [membershipStatus, setMembershipStatus] = useState(null);
   const [isMembershipActive, setIsMembershipActive] = useState(false);
-  const [paypal, setPaypal] = useState(null);
+  const addMembresia = useMembresiaStore((state) => state.addMembresia);
+  const { loadMembresia, membresia, loading } = useMembresia();
+  const [favoritos, setFavoritos] = useState([]);
 
+  const formik = useFormik({
+    initialValues: crearInitMembresia,
+    validationSchema: createMembresiaValidationSchema,
+    onSubmit: async (form) => {
+      try {
+        // Asegúrate de que el objeto sea exactamente como espera el backend
+        const membershipData = {
+          tipoMembresia: form.tipoMembresia,
+        };
+        console.log("Estado de pago: ", isMembershipActive);
+        if (isMembershipActive) {
+          await addMembresia(membershipData);
+          formik.resetForm();
+          setMembershipStatus({
+            success: true,
+            message: `Membresía ${membershipData.tipoMembresia} actualizada con éxito`,
+          });
+        } else {
+          setMembershipStatus({
+            success: false,
+            message: "Debes completar el pago para activar la membresía.",
+          });
+        }
+      } catch (error) {
+        const errorMessage =
+          error.response?.data?.message ||
+          error.response?.data?.errors ||
+          error.message ||
+          "Hubo un problema al procesar la membresía";
 
-  const toggleMembership = () => {
-    setIsMembershipActive(!isMembershipActive);
+        setError(errorMessage);
+        setMembershipStatus({
+          success: false,
+          message: errorMessage,
+        });
+      }
+    },
+  });
+
+  const onPaymentSuccess = (details, actions) => {
+    console.log('Pago aprobado', details);
+    // Aquí puedes actualizar el estado de la membresía en tu sistema
+    setIsMembershipActive(true); // Establecer la suscripción como activa
   };
 
   useEffect(() => {
@@ -25,115 +76,163 @@ export const UsuarioPages = () => {
           decodedToken[
             "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress"
           ];
-        if (email) {
-          setEmail(email);
-        } else {
-          setError("No se encontró el correo electrónico en el token.");
-        }
-      } catch (error) {
-        setError(
-          "Token inválido o expirado. Por favor, inicia sesión nuevamente."
-        );
+        setEmail(email || "Usuario desconocido");
+      } catch (err) {
+        setError("Token inválido. Por favor, inicia sesión.");
       }
-    } else {
-      setError("No se encontró el token de usuario. Por favor, inicia sesión.");
     }
   }, []);
 
   useEffect(() => {
-    const pago = localStorage.getItem("__paypal_storage__");
-    console.log(pago);
-    
-    if (pago) {
-      try {
-        const decodedPago = jwtDecode(pago);
-          setPaypal(decodedPago.pago);
-    
-      } catch (error) {
-        setError(
-          "Token inválido o expirado. Por favor, inicia sesión nuevamente."
-        );
-      }
-    } else {
-      setError("No se encontró el token de usuario. Por favor, inicia sesión.");
-    }
+    loadMembresia();
+  }, [loadMembresia]);
+
+
+
+  useEffect(() => {
+    const loadFavoritos = () => {
+      // Esto es solo un ejemplo, deberías cargar los favoritos desde una API o estado global
+      const favoritosData = [
+        { id: 1, title: "Libro 1", author: "Autor 1" },
+        { id: 2, title: "Libro 2", author: "Autor 2" },
+      ];
+      setFavoritos(favoritosData);
+    };
+
+    loadFavoritos();
   }, []);
 
+  const removeFavorito = (id) => {
+    setFavoritos(favoritos.filter((libro) => libro.id !== id));
+  };
+
   return (
-    <div className="w-full max-w-4xl mx-auto p-8 space-y-6 bg-gray-100">
-      <header className="flex flex-col sm:flex-row items-center sm:items-start justify-between gap-4">
-        <div className="flex flex-col items-center sm:items-start text-center sm:text-left">
-          <div className="w-24 h-24 mb-2 bg-gray-300 rounded-full flex items-center justify-center shadow-lg">
-            {/* Imagen del perfil */}
-          </div>
-          <h1 className="text-2xl font-bold text-gray-800">{email}</h1>
-        </div>
-        <div className="flex flex-col sm:flex-row gap-2">
-          <button className="border border-gray-300 px-4 py-2 rounded hover:bg-gray-200 transition duration-200">
-            Editar
-          </button>
-          <button className="bg-blue-500 text-white px-4 py-2 rounded shadow hover:bg-blue-600 transition duration-200">
-            Compartir perfil
-          </button>
-        </div>
-      </header>
+    <div className="min-h-screen bg-slate-50 py-12 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto">
+        <h1 className="text-4xl font-semibold text-blue-500 mb-8">Mi Perfil</h1>
 
-      <div className="border rounded-lg p-6 bg-gradient-to-r bg-slate-200 text-black shadow-lg">
-        <h2 className="font-bold text-2xl mb-4">Membresía Premium</h2>
-        <div className="flex items-center justify-between mb-4">
-          <div className="flex items-center space-x-2">
-            <input
-              type="checkbox"
-              checked={isMembershipActive}
-              onChange={toggleMembership}
-              className="form-checkbox h-6 w-6 border-gray-300 text-indigo-600"
-            />
-            <label className="text-lg font-semibold">
-              {isMembershipActive ? "Membresía activa" : "Activar membresía"}
-            </label>
-          </div>
-          {isMembershipActive && (
-            <FaCheckCircle className="text-green-400 h-8 w-8" />
-          )}
-        </div>
-        {isMembershipActive && (
-          <div className="mt-4">
-            <Paypal />
-          </div>
-        )}
-      </div>
+        <div className="grid md:grid-cols-3 gap-10">
+          {/* Perfil y Detalles de Membresía */}
+          <div className="md:col-span-1 bg-gradient-to-br from-blue-500 to-gray-500 rounded-2xl shadow-lg p-8">
+            <div className="relative">
+              {membershipType === "Premium" && (
+                <div className="absolute top-0 right-0 flex items-center bg-yellow-500 text-white px-3 py-1 rounded-full text-sm">
+                  <FaCrown className="mr-2" />
+                  Premium
+                </div>
+              )}
 
-      <div className="border rounded p-4 bg-white shadow-md">
-        <h2 className="font-bold text-xl mb-4">Mis reseñas recientes</h2>
-        <div className="space-y-4">
-          {[1, 2, 3].map((review) => (
-            <div
-              key={review}
-              className="border rounded p-4 bg-gray-50 shadow-sm"
-            >
-              <div className="flex items-center justify-between mb-2">
-                <Link className="font-semibold text-gray-800">
-                  Título del libro {review}
-                </Link>
-                <div className="flex">
-                  {[1, 2, 3, 4, 5].map((star) => (
-                    <span
-                      key={star}
-                      className={`h-4 w-4 ${
-                        star <= review ? "text-yellow-400" : "text-gray-300"
-                      }`}
-                    >
-                      <HiOutlineStar />
-                    </span>
-                  ))}
+              <div className="flex flex-col items-center mb-6">
+                <div className="w-32 h-32 bg-white rounded-full flex items-center justify-center mb-4 shadow-xl">
+                  <HiUser className="text-black w-20 h-20 opacity-90" />
+                </div>
+                <h2 className="text-2xl font-bold text-gray-100 mb-2">
+                  {email || "Usuario"}
+                </h2>
+                <p className="text-gray-200">
+                  {membresia.tipoMembresia} Membership
+                </p>
+              </div>
+
+              <div className="bg-gray-50 rounded-xl p-6 space-y-4">
+                <div className="flex items-center text-gray-700">
+                  <FaCalendarAlt className="mr-3 text-blue-500" />
+                  <span>
+                    Inicio:{" "}
+                    {new Date(membresia.fechaInicio).toLocaleDateString()}
+                  </span>
+                </div>
+                <div className="flex items-center text-gray-700">
+                  <FaClock className="mr-3 text-green-500" />
+                  <span>
+                    Fin: {new Date(membresia.fechaFin).toLocaleDateString()}
+                  </span>
+                </div>
+                <div className="flex items-center text-gray-700">
+                  <FaTrophy className="mr-3 text-purple-500" />
+                  <span>Días Restantes: {membresia.diasRestantes}</span>
                 </div>
               </div>
-              <p className="text-sm text-gray-700">
-                Esta es una reseña corta del libro {review}. Aquí el usuario
-                comparte sus pensamientos y opiniones sobre la obra.
-              </p>
             </div>
-          ))}
+          </div>
+
+          {/* Cambio de Membresía */}
+          <div className="md:col-span-1 bg-slate-200 rounded-2xl shadow-lg p-8">
+            <form onSubmit={formik.handleSubmit} className="space-y-6">
+              <div className="bg-stale-300 rounded-xl">
+                <label className="block text-gray-700 font-semibold mb-4 text-center">
+                  <TbCreditCardPay className="mx-auto text-6xl mb-4 text-rose-500" />
+                  Seleccionar Tipo de Membresía
+                </label>
+                <select
+                  className="w-full px-4 py-3 border-2 border-indigo-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-300"
+                  name="tipoMembresia"
+                  value={formik.values.tipoMembresia}
+                  onChange={formik.handleChange}
+                >
+                  <option value="Gratis">Gratis</option>
+                  <option value="Premium">Premium</option>
+                </select>
+              </div>
+
+              <Paypal onPaymentSuccess={onPaymentSuccess} />
+
+              <div className="flex justify-center">
+                <button
+                  type="submit"
+                  className="px-10 py-4 bg-gradient-to-r from-blue-600 to-indigo-700 text-white rounded-xl hover:from-blue-700 hover:to-indigo-800 transition-all transform hover:scale-105 shadow-xl"
+                >
+                  Confirmar Membresía
+                </button>
+              </div>
+            </form>
+
+            {(membershipStatus || error) && (
+              <div
+                className={`mt-6 p-4 rounded-lg shadow-md text-center ${
+                  membershipStatus?.success
+                    ? "bg-green-100 text-green-800"
+                    : "bg-red-100 text-red-800"
+                }`}
+              >
+                <p>{membershipStatus?.message || error}</p>
+              </div>
+            )}
+          </div>
+
+          {/* Libros Favoritos */}
+          <div className="md:col-span-1 bg-gray-100 rounded-2xl shadow-lg p-8">
+            <h2 className="text-2xl font-semibold mb-6 text-center text-gray-800">
+              <ImBooks className="mx-auto text-6xl mb-4 text-green-500" /> Mis
+              Libros Favoritos
+            </h2>
+            {favoritos.length === 0 ? (
+              <div className="text-center text-gray-500 py-8">
+                <HiBookOpen className="mx-auto text-6xl mb-4 text-blue-700" />
+                <p>No tienes libros favoritos aún</p>
+              </div>
+            ) : (
+              <div className="space-y-4">
+                {favoritos.map((libro) => (
+                  <div
+                    key={libro.id}
+                    className="flex justify-between items-center bg-gray-50 p-4 rounded-lg shadow-md hover:bg-gray-100 transition-colors"
+                  >
+                    <div className="flex flex-col">
+                      <h3 className="font-bold text-gray-800">{libro.title}</h3>
+                      <span className="text-gray-600">{libro.author}</span>
+                    </div>
+                    <Link
+                      onClick={() => removeFavorito(libro.id)}
+                      className="text-red-500 hover:text-red-700 transition-colors"
+                    >
+                      <FaTrash />
+                    </Link>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </div>

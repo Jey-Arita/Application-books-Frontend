@@ -1,8 +1,9 @@
-import { api } from "../../utils/api"; // Configura aquí tu función para realizar llamadas a tu servidor
+import { appApi } from "../../../config/api";
+
 
 export const agregarAFavoritos = async (data) => {
   try {
-    const response = await api.post("/favoritos", data);
+    const response = await appApi.post("/favoritos", data);
     return response.data; // Devuelve la respuesta de la llamada
   } catch (error) {
     console.error("Error en la solicitud para agregar a favoritos", error);

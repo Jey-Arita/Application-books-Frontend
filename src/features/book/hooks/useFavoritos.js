@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { agregarAFavoritos } from "../../../shared/actions/favoritos/favoritos"; // Ajusta la ruta según sea necesario
+import { agregarAFavoritos } from "../../../shared/actions/favoritos/favorito";
+
 
 export const useFavoritos = (idLibro) => {
   const [isFavorito, setIsFavorito] = useState(false);

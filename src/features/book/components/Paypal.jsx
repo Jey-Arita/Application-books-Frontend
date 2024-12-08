@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 
 const createSubscription = (data, actions, setIsMembershipActive) => {
   const [userId, setUserId] = useState(null);
+
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (token) {
@@ -11,12 +12,10 @@ const createSubscription = (data, actions, setIsMembershipActive) => {
         const decodedToken = jwtDecode(token);
         setUserId(decodedToken.UserId);
       } catch (error) {
-        setError(
-          "Token inválido o expirado. Por favor, inicia sesión nuevamente."
-        );
+        console.error("Token inválido o expirado. Por favor, inicia sesión nuevamente.");
       }
     } else {
-      setError("No se encontró el token de usuario. Por favor, inicia sesión.");
+      console.error("No se encontró el token de usuario. Por favor, inicia sesión.");
     }
   }, []);
 
@@ -25,27 +24,25 @@ const createSubscription = (data, actions, setIsMembershipActive) => {
   const status = "ACTIVE";
 
   if (updatedSubscription && (status === "ACTIVE" || status === "SUSPENDED")) {
-    return actions.subscription.revise(subscriptionId, {
+    // Simulamos que la suscripción se actualiza de inmediato
+    setIsMembershipActive(true);
+    return actions.subscription.revise(subscriptionId, { 
       plan_id: "NEW_MENSUAL_PLAN_ID",
     });
   }
 
-  return actions.subscription
-    .create({
-      plan_id: "NEW_MENSUAL_PLAN_ID",
-    })
-    .then(() => {
-      setIsMembershipActive(true);
-    });
+  // Simulamos la creación de la suscripción sin validación adicional
+  setIsMembershipActive(true); // Aquí activamos la membresía
+  return actions.subscription.create({
+    plan_id: "NEW_MENSUAL_PLAN_ID",
+  });
 };
 
-export const Paypal = () => {
-  const [isMembershipActive, setIsMembershipActive] = useState(false);
-
+export const Paypal = ({ onPaymentSuccess }) => {
   return (
     <div className="space-y-4">
       <div className="flex items-center space-x-2">
-        <label>Plan Mensual - $9.99/mes</label>
+        <label>Plan Premium - $9.99/mes</label>
       </div>
 
       {/* Botón de PayPal */}
@@ -70,9 +67,10 @@ export const Paypal = () => {
             });
           }}
           onApprove={(data, actions) => {
-            return actions.order.capture().then(() => {
-              createSubscription(data, actions, setIsMembershipActive); // Llamar a la función de suscripción
-            });
+            // Simulamos la aprobación del pago sin validación
+            console.log('Pago aprobado - Simulación');
+            onPaymentSuccess(data, actions); // Llamada a la función de suscripción
+            return actions.order.capture(); // Simulamos la captura de la orden
           }}
         />
       </PayPalScriptProvider>
