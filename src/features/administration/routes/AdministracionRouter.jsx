@@ -1,4 +1,4 @@
-import { Navigate, Route, Routes } from "react-router-dom"
+import {Route, Routes } from "react-router-dom"
 import { Footer, Nav } from "../../book/components"
 import { Menu } from "../components"
 import { AdministracionAutor } from "../pages/AdministracionAutor"

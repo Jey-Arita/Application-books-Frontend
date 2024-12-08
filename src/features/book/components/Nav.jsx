@@ -1,26 +1,28 @@
 import { useState } from "react";
 import { CiMenuBurger } from "react-icons/ci";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { FaHouseChimney, FaUser, FaBook } from "react-icons/fa6";
 import { BiSolidCategory } from "react-icons/bi";
-import {
-  IoIosArrowDropdownCircle,
-  IoIosArrowDropupCircle,
-} from "react-icons/io";
 import { MdFavorite } from "react-icons/md";
 import { FaWindowClose } from "react-icons/fa";
-import { IoMdExit } from "react-icons/io";
-import { GrConfigure } from "react-icons/gr";
-import { GoPerson } from "react-icons/go";
 import { GiBookPile } from "react-icons/gi";
 import { ProtectedComponent } from "../../../shared/components/ProtectedComponet";
 import { rolesListConstant } from "../../../shared/constants";
 import { RiAdminFill } from "react-icons/ri";
 import { useAuthStore } from "../../security/store";
+import { IoCloseCircle } from "react-icons/io5";
 
 export const Nav = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const { isAuthenticated, logout } = useAuthStore();
+  const navigate = useNavigate();
+
+  const cerrarSesion = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("refreshToken")
+    localStorage.removeItem("user")
+    useAuthStore.setState({ user: null, isAuthenticated: false });
+    navigate("/bienvenida"); // Redirige al usuario
+  };
 
   const handleSidebarToggle = () => {
     setIsSidebarOpen(!isSidebarOpen);
@@ -88,14 +90,14 @@ export const Nav = () => {
           >
             <FaBook className="w-5 h-5 mr-2" /> Autores
           </Link>
-          {isAuthenticated && (
+       
             <button
-              onClick={logout}
+              onClick={cerrarSesion}
               className="flex items-center text-white px-4 py-2 hover:bg-red-500 transition-colors"
             >
-              Cerrar Sesión
+             <IoCloseCircle className="w-5 h-5 mr-2" /> Cerrar Sesión
             </button>
-          )}
+     
         </div>
       </nav>
 
