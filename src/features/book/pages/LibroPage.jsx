@@ -3,7 +3,7 @@ import { Link, useParams } from "react-router-dom";
 import { HiOutlineStar } from "react-icons/hi";
 import { BsHeart } from "react-icons/bs";
 import { useLibro } from "../hooks/useLibro";
-import { useAutor, useGeneroList } from "../hooks";
+import { useAutor, useFavorito, useGeneroList } from "../hooks";
 import { useComentario } from "../hooks/useComentario";
 import LibroPageSkeleton from "../components/LibroPageSkeleton";
 import { Comenta, PdfVista } from "../components";
@@ -21,7 +21,7 @@ export const LibroPage = () => {
     isLoading: isLoadingAutor,
     loadAutor,
   } = useAutor(libro?.idAutor);
-  const [isFavorito, setIsFavorito] = useState(false);
+  const { isFavorito, loading, toggleFavorito } = useFavorito(id);
   const [ratio, setRatio] = useState(0); // Estrellas seleccionadas por el usuario
   const [userCalificado, setUserCalificado] = useState(false); // Nuevo estado
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -78,11 +78,6 @@ export const LibroPage = () => {
       cargarCalificacionUsuario();
     }
   }, [id, libro?.promedio]); // Agregar libro.promedio como dependencia
-  
-
-  const handleFavoritoClick = () => {
-    setIsFavorito((prevFavorito) => !prevFavorito);
-  };
 
   const handleOpenPdf = () => setIsModalOpen(true);
   const handleClosePdf = () => setIsModalOpen(false);
@@ -210,7 +205,7 @@ export const LibroPage = () => {
               className={`flex items-center h-9 text-blue-600 hover:text-blue-800 transition-colors duration-200 ${
                 isFavorito ? "text-rose-500" : ""
               }`}
-              onClick={handleFavoritoClick}
+              onClick={toggleFavorito}
             >
               <BsHeart
                 className={`w-4 h-4 mr-2 transition-transform duration-200 hover:scale-125 ${
