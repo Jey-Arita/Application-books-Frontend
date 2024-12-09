@@ -11,7 +11,6 @@ import {
   enviarCalificacion,
   obtenerCalificacionUsuario,
 } from "../../../shared/actions/Calificacion/calificacion"; // Nueva función
-import { verificarFavoritos } from "../../../shared/actions/favoritos/favorito";
 
 export const LibroPage = () => {
   const { id } = useParams(); // Obtener el id dinámico de la URL

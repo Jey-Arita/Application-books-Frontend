@@ -5,7 +5,6 @@ export const agregarFavorito = async (idLibro) => {
     const response = await appApi.post(`/listafavoritos`, idLibro);
     return response.data;
   } catch (error) {
-    console.error("Error al agregar el libro a favoritos:", error);
     throw error;
   }
 };
@@ -15,7 +14,6 @@ export const eliminarFavorito = async (idLibro) => {
     const response = await appApi.delete(`/api/favoritos/${idLibro}`);
     return response.data;
   } catch (error) {
-    console.error("Error al eliminar el libro de favoritos:", error);
     throw error;
   }
 };
@@ -25,7 +23,6 @@ export const verificarFavoritos = async (idLibro) => {
     const response = await appApi.get(`/listafavoritos/is-favorito/${idLibro}`);
 return response?.data || false;
   } catch (error) {
-    console.error("Error al verificar el estado de favorito", error);
     return false;
   }
 };
@@ -38,4 +35,14 @@ export const getFavoritosList = async () => {
       console.error(error);
       return error.response;
   }
-}
+};
+  export const getDeleteFavoritos = async (idLibro) => {
+    try {
+        const {data} = await appApi.delete(`/listafavoritos/${idLibro}`);
+        return data;
+    } catch (error) {
+        console.error(error);
+        return error.response;
+    }
+  };
+
