@@ -15,7 +15,6 @@ import { Link } from "react-router-dom";
 export const UsuarioPages = () => {
   const [error, setError] = useState("");
   const [email, setEmail] = useState(null);
-  const [membershipType, setMembershipType] = useState("Gratis");
   const [membershipStatus, setMembershipStatus] = useState(null);
   const [isMembershipActive, setIsMembershipActive] = useState(false);
   const addMembresia = useMembresiaStore((state) => state.addMembresia);
@@ -27,11 +26,9 @@ export const UsuarioPages = () => {
     validationSchema: createMembresiaValidationSchema,
     onSubmit: async (form) => {
       try {
-        // Asegúrate de que el objeto sea exactamente como espera el backend
         const membershipData = {
           tipoMembresia: form.tipoMembresia,
         };
-        console.log("Estado de pago: ", isMembershipActive);
         if (isMembershipActive) {
           await addMembresia(membershipData);
           formik.resetForm();
@@ -61,9 +58,7 @@ export const UsuarioPages = () => {
     },
   });
 
-  const onPaymentSuccess = (details, actions) => {
-    console.log('Pago aprobado', details);
-    // Aquí puedes actualizar el estado de la membresía en tu sistema
+  const onPaymentSuccess = () => {
     setIsMembershipActive(true); // Establecer la suscripción como activa
   };
 
@@ -115,7 +110,7 @@ export const UsuarioPages = () => {
           {/* Perfil y Detalles de Membresía */}
           <div className="md:col-span-1 bg-gradient-to-br from-blue-500 to-gray-500 rounded-2xl shadow-lg p-8">
             <div className="relative">
-              {membershipType === "Premium" && (
+              {membresia.activaMembresia && (
                 <div className="absolute top-0 right-0 flex items-center bg-yellow-500 text-white px-3 py-1 rounded-full text-sm">
                   <FaCrown className="mr-2" />
                   Premium
