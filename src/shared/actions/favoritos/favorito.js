@@ -29,8 +29,6 @@ return response?.data || false;
     return false;
   }
 };
-<<<<<<< HEAD
-=======
 
 export const getFavoritosList = async () => {
   try {
@@ -41,4 +39,3 @@ export const getFavoritosList = async () => {
       return error.response;
   }
 }
->>>>>>> 368f2a7689c13ed733174fb626fd0cfda977aa4a
