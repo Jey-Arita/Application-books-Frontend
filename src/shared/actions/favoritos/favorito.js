@@ -19,12 +19,13 @@ export const eliminarFavorito = async (idLibro) => {
     throw error;
   }
 };
-export const verificarFavorito = async (data) => {
+
+export const verificarFavoritos = async (idLibro) => {
   try {
-    const response = await appApi.post("listafavoritos/verificar", data);
-    return response.data; // Devuelve la información de si es favorito o no
+    const response = await appApi.get(`/listafavoritos/is-favorito/${idLibro}`);
+return response?.data || false;
   } catch (error) {
-    console.error("Error al verificar los favoritos", error);
-    return { data: false };
+    console.error("Error al verificar el estado de favorito", error);
+    return false;
   }
 };

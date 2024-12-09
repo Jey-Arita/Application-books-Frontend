@@ -11,17 +11,18 @@ import {
   enviarCalificacion,
   obtenerCalificacionUsuario,
 } from "../../../shared/actions/Calificacion/calificacion"; // Nueva función
+import { verificarFavoritos } from "../../../shared/actions/favoritos/favorito";
 
 export const LibroPage = () => {
   const { id } = useParams(); // Obtener el id dinámico de la URL
   const { libro, isLoading, loadLibro } = useLibro(id); // Obtener información del libro
   const { comentarios, isLoading: isLoadingComentarios } = useComentario(id);
+  const { isFavorito, loading, toggleFavorito } = useFavorito(id);
   const {
     autor,
     isLoading: isLoadingAutor,
     loadAutor,
   } = useAutor(libro?.idAutor);
-  const { isFavorito, loading, toggleFavorito } = useFavorito(id);
   const [ratio, setRatio] = useState(0); // Estrellas seleccionadas por el usuario
   const [userCalificado, setUserCalificado] = useState(false); // Nuevo estado
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -58,7 +59,7 @@ export const LibroPage = () => {
       setRatio(libro?.puntuacion || 0); // Ajustar el ratio con la puntuación actual del libro
     }
   }, [libro]);
-
+  
   useEffect(() => {
     const cargarCalificacionUsuario = async () => {
       try {
@@ -200,21 +201,26 @@ export const LibroPage = () => {
 
           {/* Favoritos */}
           <div className="mt-6">
-            <button
-              type="button"
-              className={`flex items-center h-9 text-blue-600 hover:text-blue-800 transition-colors duration-200 ${
-                isFavorito ? "text-rose-500" : ""
-              }`}
-              onClick={toggleFavorito}
-            >
-              <BsHeart
-                className={`w-4 h-4 mr-2 transition-transform duration-200 hover:scale-125 ${
-                  isFavorito ? "fill-current text-rose-500" : ""
-                }`}
-              />
-              {isFavorito ? "Favorito" : "Agregar a Favoritos"}
-            </button>
-          </div>
+  <button
+    type="button"
+    className={`flex items-center h-9 ${
+      isFavorito ? "text-rose-500" : "text-blue-600"
+    } hover:text-blue-800 transition-colors duration-200`}
+    onClick={toggleFavorito}
+    disabled={loading}
+  >
+    <BsHeart
+      className={`w-4 h-4 mr-2 ${
+        isFavorito ? "fill-current text-rose-500" : "fill-current text-blue-600"
+      }`}
+    />
+    {isFavorito ? "Favorito" : "Agregar a Favoritos"}
+  </button>
+  
+</div>
+
+
+
         </div>
       </div>
 
