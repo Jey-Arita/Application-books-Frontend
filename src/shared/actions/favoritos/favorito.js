@@ -28,3 +28,13 @@ export const verificarFavorito = async (data) => {
     return { data: false };
   }
 };
+
+export const getFavoritosList = async () => {
+  try {
+      const {data} = await appApi.get(`/listafavoritos`);
+      return data;
+  } catch (error) {
+      console.error(error);
+      return error.response;
+  }
+}
