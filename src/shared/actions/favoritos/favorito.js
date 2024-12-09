@@ -9,15 +9,6 @@ export const agregarFavorito = async (idLibro) => {
   }
 };
 
-export const eliminarFavorito = async (idLibro) => {
-  try {
-    const response = await appApi.delete(`/api/favoritos/${idLibro}`);
-    return response.data;
-  } catch (error) {
-    throw error;
-  }
-};
-
 export const verificarFavoritos = async (idLibro) => {
   try {
     const response = await appApi.get(`/listafavoritos/is-favorito/${idLibro}`);
@@ -36,13 +27,4 @@ export const getFavoritosList = async () => {
       return error.response;
   }
 };
-  export const getDeleteFavoritos = async (idLibro) => {
-    try {
-        const {data} = await appApi.delete(`/listafavoritos/${idLibro}`);
-        return data;
-    } catch (error) {
-        console.error(error);
-        return error.response;
-    }
-  };
 

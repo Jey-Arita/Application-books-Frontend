@@ -58,7 +58,7 @@ export const LibroPage = () => {
       setRatio(libro?.puntuacion || 0); // Ajustar el ratio con la puntuación actual del libro
     }
   }, [libro]);
-  
+
   useEffect(() => {
     const cargarCalificacionUsuario = async () => {
       try {
@@ -73,7 +73,7 @@ export const LibroPage = () => {
         console.error("Error al cargar la calificación del usuario:", error);
       }
     };
-  
+
     if (id) {
       cargarCalificacionUsuario();
     }
@@ -84,12 +84,12 @@ export const LibroPage = () => {
   const handleLibroRatio = async (newRatio) => {
     // Actualizar la puntuación en el estado local inmediatamente
     setRatio(newRatio);
-  
+
     const dtoCalificacion = {
       idLibro: libro?.id || "",
       puntuacion: newRatio,
     };
-  
+
     try {
       await enviarCalificacion(dtoCalificacion); // Enviar la nueva calificación
       console.log("Calificación enviada exitosamente");
@@ -98,7 +98,7 @@ export const LibroPage = () => {
       console.error("Error al enviar la calificación", err);
     }
   };
-  
+
   if (isLoading || isLoadingAutor || isLoadingComentarios) {
     return <LibroPageSkeleton />;
   }
@@ -134,11 +134,10 @@ export const LibroPage = () => {
               {estrellas.map((_, index) => (
                 <HiOutlineStar
                   key={index}
-                  className={`w-6 h-6  ${
-                    index < estrellasLlenas
+                  className={`w-6 h-6  ${index < estrellasLlenas
                       ? "text-yellow-500"
                       : "text-gray-300"
-                  }`}
+                    }`}
                 />
               ))}
             </div>
@@ -171,7 +170,7 @@ export const LibroPage = () => {
               Ver PDF
             </button>
           </div>
- 
+
           {/* Modal de PDF */}
           <PdfVista
             isOpen={isModalOpen}
@@ -189,9 +188,8 @@ export const LibroPage = () => {
               {Array.from({ length: 5 }, (_, i) => (
                 <HiOutlineStar
                   key={i}
-                  className={`w-6 h-6 ${
-                    i < ratio ? "text-yellow-500 scale-100" : "text-gray-300"
-                  }`}
+                  className={`w-6 h-6 ${i < ratio ? "text-yellow-500 scale-100" : "text-gray-300"
+                    }`}
                   onClick={() => handleLibroRatio(i + 1)}
                 />
               ))}
@@ -200,26 +198,21 @@ export const LibroPage = () => {
 
           {/* Favoritos */}
           <div className="mt-6">
-  <button
-    type="button"
-    className={`flex items-center h-9 ${
-      isFavorito ? "text-rose-500" : "text-blue-600"
-    } hover:text-blue-800 transition-colors duration-200`}
-    onClick={toggleFavorito}
-    disabled={loading}
-  >
-    <BsHeart
-      className={`w-4 h-4 mr-2 ${
-        isFavorito ? "fill-current text-rose-500" : "fill-current text-blue-600"
-      }`}
-    />
-    {isFavorito ? "Favorito" : "Agregar a Favoritos"}
-  </button>
-  
-</div>
+            <button
+              type="button"
+              className={`flex items-center h-9 ${isFavorito ? "text-rose-500" : "text-blue-600"
+                } hover:text-blue-800 transition-colors duration-200`}
+              onClick={toggleFavorito}
+              disabled={loading}
+            >
+              <BsHeart
+                className={`w-4 h-4 mr-2 ${isFavorito ? "fill-current text-rose-500" : "fill-current text-blue-600"
+                  }`}
+              />
+              {isFavorito ? "Favorito" : "Agregar a Favoritos"}
+            </button>
 
-
-
+          </div>
         </div>
       </div>
 
