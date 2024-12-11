@@ -3,7 +3,8 @@ import { HiOutlineStar } from "react-icons/hi";
 import { useEffect, useState } from "react";
 import { HiMiniMagnifyingGlass } from "react-icons/hi2";
 import { Loading } from "../../../shared/components";
-import { useFavoritoList } from "../hooks/useListaFavorito";
+import { useFavoritoList } from "../hooks";
+
 
 export const FavoritosPage = () => {
   const [filteredLibros, setFilteredLibros] = useState([]);

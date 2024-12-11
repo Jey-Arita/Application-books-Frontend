@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { HiBookOpen, HiUser } from "react-icons/hi";
+import { HiBookOpen, HiOutlineStar, HiUser } from "react-icons/hi";
 import { FaCalendarAlt, FaCrown } from "react-icons/fa";
 import { Paypal } from "../components";
 import { jwtDecode } from "jwt-decode";
@@ -7,10 +7,11 @@ import { useMembresiaStore } from "../store";
 import { useFormik } from "formik";
 import { crearInitMembresia, createMembresiaValidationSchema } from "../forms";
 import { FaCheck, FaClock, FaHeart, FaTrash, FaTrophy } from "react-icons/fa6";
-import { useMembresia } from "../hooks";
+import { useFavoritoList, useMembresia } from "../hooks";
 import { ImBooks } from "react-icons/im";
 import { TbCreditCardPay } from "react-icons/tb";
 import { Link } from "react-router-dom";
+import { formatoTiempo } from "../../../shared/utils";
 
 export const UsuarioPages = () => {
   const [error, setError] = useState("");
@@ -19,7 +20,7 @@ export const UsuarioPages = () => {
   const [isMembershipActive, setIsMembershipActive] = useState(false);
   const addMembresia = useMembresiaStore((state) => state.addMembresia);
   const { loadMembresia, membresia, loading } = useMembresia();
-  const [favoritos, setFavoritos] = useState([]);
+  const { favoritos, isLoading } = useFavoritoList();
 
   const formik = useFormik({
     initialValues: crearInitMembresia,
@@ -29,6 +30,15 @@ export const UsuarioPages = () => {
         const membershipData = {
           tipoMembresia: form.tipoMembresia,
         };
+        if (membershipData.tipoMembresia === "Prueba") {
+          await addMembresia(membershipData);
+          formik.resetForm();
+          setMembershipStatus({
+            success: true,
+            message: "Membresía de prueba activada con éxito.",
+          });
+          return;
+        }
         if (isMembershipActive) {
           await addMembresia(membershipData);
           formik.resetForm();
@@ -82,23 +92,6 @@ export const UsuarioPages = () => {
     loadMembresia();
   }, [loadMembresia]);
 
-  useEffect(() => {
-    const loadFavoritos = () => {
-      // Esto es solo un ejemplo, deberías cargar los favoritos desde una API o estado global
-      const favoritosData = [
-        { id: 1, title: "Libro 1", author: "Autor 1" },
-        { id: 2, title: "Libro 2", author: "Autor 2" },
-      ];
-      setFavoritos(favoritosData);
-    };
-
-    loadFavoritos();
-  }, []);
-
-  const removeFavorito = (id) => {
-    setFavoritos(favoritos.filter((libro) => libro.id !== id));
-  };
-
   return (
     <div className="min-h-screen bg-slate-50 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
@@ -109,9 +102,24 @@ export const UsuarioPages = () => {
           <div className="md:col-span-1 bg-gradient-to-br from-blue-500 to-gray-500 rounded-2xl shadow-lg p-8">
             <div className="relative">
               {membresia.activaMembresia && (
-                <div className="absolute top-0 right-0 flex items-center bg-yellow-500 text-white px-3 py-1 rounded-full text-sm">
-                  <FaCrown className="mr-2" />
-                  Premium
+                <div
+                  className={`absolute top-0 right-0 flex items-center px-3 py-1 rounded-full text-sm ${
+                    membresia.tipoMembresia === "Premium"
+                      ? "bg-yellow-500 text-white"
+                      : "bg-gray-400 text-white"
+                  }`}
+                >
+                  {membresia.tipoMembresia === "Premium" ? (
+                    <>
+                      <FaCrown className="mr-2" />
+                      Premium
+                    </>
+                  ) : (
+                    <>
+                      <FaTrophy className="mr-2" />
+                      Prueba
+                    </>
+                  )}
                 </div>
               )}
 
@@ -130,16 +138,11 @@ export const UsuarioPages = () => {
               <div className="bg-gray-50 rounded-xl p-6 space-y-4">
                 <div className="flex items-center text-gray-700">
                   <FaCalendarAlt className="mr-3 text-blue-500" />
-                  <span>
-                    Inicio:{" "}
-                    {new Date(membresia.fechaInicio).toLocaleDateString()}
-                  </span>
+                  <span>Inicio: {formatoTiempo(membresia.fechaInicio)}</span>
                 </div>
                 <div className="flex items-center text-gray-700">
                   <FaClock className="mr-3 text-green-500" />
-                  <span>
-                    Fin: {new Date(membresia.fechaFin).toLocaleDateString()}
-                  </span>
+                  <span>Fin: {formatoTiempo(membresia.fechaFin)}</span>
                 </div>
                 <div className="flex items-center text-gray-700">
                   <FaTrophy className="mr-3 text-purple-500" />
@@ -168,7 +171,9 @@ export const UsuarioPages = () => {
                 </select>
               </div>
 
-              <Paypal onPaymentSuccess={onPaymentSuccess} />
+              {formik.values.tipoMembresia !== "Prueba" && (
+                <Paypal onPaymentSuccess={onPaymentSuccess} />
+              )}
 
               <div className="flex justify-center">
                 <button
@@ -206,22 +211,39 @@ export const UsuarioPages = () => {
               </div>
             ) : (
               <div className="space-y-4">
-                {favoritos.map((libro) => (
-                  <div
-                    key={libro.id}
+                {favoritos.slice(0, 5).map((favorito) => (
+                  <Link
+                    to={`/inicio/libro/${favorito.libro.data.id}`}
+                    key={favorito.id}
                     className="flex justify-between items-center bg-gray-50 p-4 rounded-lg shadow-md hover:bg-gray-100 transition-colors"
                   >
-                    <div className="flex flex-col">
-                      <h3 className="font-bold text-gray-800">{libro.title}</h3>
-                      <span className="text-gray-600">{libro.author}</span>
+                    <div className="flex items-center space-x-4">
+                      {/* Imagen más pequeña */}
+                      <img
+                        src={favorito.libro.data.urlImg}
+                        alt={`Portada de ${favorito.libro.data.titulo}`}
+                        className="w-16 h-16 object-cover rounded"
+                      />
+                      {/* Información del libro */}
+                      <div>
+                        <h3 className="font-bold text-gray-800">
+                          {favorito.libro.data.titulo}
+                        </h3>
+                        <div className="flex items-center">
+                          {[...Array(5)].map((_, index) => (
+                            <HiOutlineStar
+                              key={index}
+                              className={`h-5 w-5 ${
+                                index < favorito.libro.data.promedio
+                                  ? "text-yellow-400 fill-yellow-400"
+                                  : "text-gray-300"
+                              }`}
+                            />
+                          ))}
+                        </div>
+                      </div>
                     </div>
-                    <Link
-                      onClick={() => removeFavorito(libro.id)}
-                      className="text-red-500 hover:text-red-700 transition-colors"
-                    >
-                      <FaTrash />
-                    </Link>
-                  </div>
+                  </Link>
                 ))}
               </div>
             )}

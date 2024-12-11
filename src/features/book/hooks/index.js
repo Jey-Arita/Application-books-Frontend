@@ -9,5 +9,5 @@ export * from './useFavoritos'
 export * from './useMembresia'
 export * from './useMembresiaEdit'
 export * from './useLibrosPorGenero'
-
+export * from './useListaFavorito'
 

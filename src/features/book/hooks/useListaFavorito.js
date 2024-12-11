@@ -16,7 +16,6 @@ export const useFavoritoList = () => {
             return { ...favorito, libro }; 
         })
     );
-    console.log(favoritosConLibros); 
     setFavoritos(favoritosConLibros); 
     } catch (error) {
       console.error("Error al cargar los géneros:", error);
