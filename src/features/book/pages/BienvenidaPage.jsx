@@ -26,7 +26,7 @@ export const BienvenidaPage = () => {
       </section>
 
       {/* Sección de libros destacados */}
-      <section className="relative z-10 py-16 bg-black/70">
+      <section className="relative z-10 py-16 bg-black/70"  style={{ pointerEvents: 'none' }}>
         <div className="container mx-auto px-4">
           <h2 className="text-3xl font-bold text-white mb-8 text-center">Libros Destacados</h2>
           <Barra />

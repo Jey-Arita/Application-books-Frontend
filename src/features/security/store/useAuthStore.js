@@ -6,6 +6,7 @@ export const useAuthStore = create((set, get) => ({
     user: null,
     token: null,
     roles: [],
+    membresia: null,
     refreshToken: null,
     isAuthenticated: false,
     message: "",
@@ -16,6 +17,7 @@ export const useAuthStore = create((set, get) => ({
       if (status) {
         const decodedJwt = jwtDecode(data.token);
         const roles = decodedJwt["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"] ?? [];
+        const membresia = decodedJwt["Membresia"] ?? null;
         set({
           error: false,
           user: {
@@ -27,6 +29,7 @@ export const useAuthStore = create((set, get) => ({
           isAuthenticated: true,
           message: message,
           roles: typeof roles === "string" ? [roles] : roles,
+          membresia: membresia,
         });
   
         localStorage.setItem('user', JSON.stringify(get().user ?? {}));
@@ -46,7 +49,7 @@ export const useAuthStore = create((set, get) => ({
       localStorage.setItem('refreshToken', get().refreshToken);
     },
     logout: () => {
-      set({user: null, token: null, refreshToken: null, isAuthenticated: false, error: false, message: '', roles: [],})
+      set({user: null, token: null, refreshToken: null, isAuthenticated: false, error: false, message: '', roles: [], membresia: null,})
       localStorage.clear();
     },
     validateAuthentication: () => {
@@ -66,8 +69,8 @@ export const useAuthStore = create((set, get) => ({
           }
   
           const roles = decodeJwt["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"] ?? [];
-  
-          set({isAuthenticated: true , roles: typeof(roles) === 'string' ? [roles] : roles});
+          const membresia = decodeJwt["Membresia"] ?? null;
+          set({isAuthenticated: true , roles: typeof(roles) === 'string' ? [roles] : roles, membresia: membresia});
         } catch(error) {
           console.error(error);
           set({isAuthenticated: false})

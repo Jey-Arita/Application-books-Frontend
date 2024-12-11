@@ -6,11 +6,11 @@ import { BiSolidCategory } from "react-icons/bi";
 import { MdFavorite } from "react-icons/md";
 import { FaWindowClose } from "react-icons/fa";
 import { GiBookPile } from "react-icons/gi";
-import { ProtectedComponent } from "../../../shared/components/ProtectedComponet";
 import { rolesListConstant } from "../../../shared/constants";
 import { RiAdminFill } from "react-icons/ri";
 import { useAuthStore } from "../../security/store";
 import { IoCloseCircle } from "react-icons/io5";
+import { ProtectedComponent, ProtectedLink } from "../../../shared/components";
 
 export const Nav = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -18,8 +18,8 @@ export const Nav = () => {
 
   const cerrarSesion = () => {
     localStorage.removeItem("token");
-    localStorage.removeItem("refreshToken")
-    localStorage.removeItem("user")
+    localStorage.removeItem("refreshToken");
+    localStorage.removeItem("user");
     useAuthStore.setState({ user: null, isAuthenticated: false });
     navigate("/bienvenida"); // Redirige al usuario
   };
@@ -72,40 +72,36 @@ export const Nav = () => {
               <RiAdminFill className="w-5 h-5 mr-2" /> Administración
             </Link>
           </ProtectedComponent>
-          <Link
-            to="/genero"
-            className="flex items-center text-white px-4 py-2 hover:bg-blue-600 transition-colors"
+          <ProtectedLink to={"/genero"}>
+            <div className="flex items-center text-white px-4 py-2 hover:bg-blue-600 transition-colors">
+              <BiSolidCategory className="w-5 h-5 mr-2" /> Genero
+            </div>
+          </ProtectedLink>
+          <ProtectedLink to={"/favorito"}>
+            <div className="flex items-center text-white px-4 py-2 hover:bg-blue-600 transition-colors">
+              <MdFavorite className="w-5 h-5 mr-2" /> Favoritos
+            </div>
+          </ProtectedLink>
+          <ProtectedLink to={"/autores"}>
+            <div className="flex items-center text-white px-4 py-2 hover:bg-blue-600 transition-colors">
+              <FaBook className="w-5 h-5 mr-2" /> Autores
+            </div>
+          </ProtectedLink>
+          <button
+            onClick={cerrarSesion}
+            className="flex items-center text-white px-4 py-2 hover:bg-red-500 transition-colors"
           >
-            <BiSolidCategory className="w-5 h-5 mr-2" /> Genero
-          </Link>
-          <Link
-            to="/favorito"
-            className="flex items-center text-white px-4 py-2 hover:bg-blue-600 transition-colors"
-          >
-            <MdFavorite className="w-5 h-5 mr-2" /> Favoritos
-          </Link>
-          <Link
-            to="/autores"
-            className="flex items-center text-white px-4 py-2 hover:bg-blue-600 transition-colors"
-          >
-            <FaBook className="w-5 h-5 mr-2" /> Autores
-          </Link>
-       
-            <button
-              onClick={cerrarSesion}
-              className="flex items-center text-white px-4 py-2 hover:bg-red-500 transition-colors"
-            >
-             <IoCloseCircle className="w-5 h-5 mr-2" /> Cerrar Sesión
-            </button>
-     
+            <IoCloseCircle className="w-5 h-5 mr-2" /> Cerrar Sesión
+          </button>
         </div>
       </nav>
 
       {/* Sidebar */}
       <div
-        className={`fixed top-0 left-0 h-full bg-white shadow-lg transition-transform duration-300 z-50 ${isSidebarOpen ? "translate-x-0" : "-translate-x-full"
-          }`}
-        style={{ width: "250px" }}
+        className={`fixed top-0 left-0 h-full bg-white shadow-lg transition-transform duration-300 z-50 ${
+          isSidebarOpen ? "translate-x-0" : "-translate-x-full"
+        }`}
+        style={{ width: "100%" }}
       >
         <div className="h-14 border-b bg-gradient-to-br from-gray-600 to-blue-600 flex items-center px-4">
           <span className="text-lg font-semibold text-white">Menú</span>
@@ -122,10 +118,10 @@ export const Nav = () => {
           </Link>
           <ProtectedComponent requiredRoles={[rolesListConstant.ADMIN]}>
             <Link
-              to="/admin/autoraadmin"
+              to="/admin/dashboard"
               className="flex items-center w-full text-left py-2 hover:bg-gray-100 transition-colors"
             >
-              <RiAdminFill className="w-5 h-5 mr-2" />  Administración
+              <RiAdminFill className="w-5 h-5 mr-2" /> Administración
             </Link>
           </ProtectedComponent>
 
@@ -135,25 +131,27 @@ export const Nav = () => {
           >
             <FaUser className="w-5 h-5 mr-2" /> Perfil
           </Link>
-
-          <Link
-            to="/genero"
-            className="flex items-center w-full text-left py-2 hover:bg-gray-100 transition-colors">
-            <BiSolidCategory className="w-5 h-5 mr-2" /> Genero
-          </Link>
-
-          <Link
-            to="/favorito"
-            className="flex items-center w-full text-left py-2 hover:bg-gray-100 transition-colors"
+          <ProtectedLink to={"/genero"}>
+            <div className="flex items-center w-full text-left py-2 hover:bg-gray-100 transition-colors">
+              <BiSolidCategory className="w-5 h-5 mr-2" /> Genero
+            </div>
+          </ProtectedLink>
+          <ProtectedLink to={"/favorito"}>
+            <div className="flex items-center w-full text-left py-2 hover:bg-gray-100 transition-colors">
+              <MdFavorite className="w-5 h-5 mr-2" /> Favoritos
+            </div>
+          </ProtectedLink>
+          <ProtectedLink to={"/autores"}>
+            <div className="flex items-center w-full text-left py-2 hover:bg-gray-100 transition-colors">
+              <FaBook className="w-5 h-5 mr-2" /> Autores
+            </div>
+          </ProtectedLink>
+          <button
+            onClick={cerrarSesion}
+            className="flex items-center text-black text-left py-2 hover:bg-red-500 transition-colors"
           >
-            <MdFavorite className="w-5 h-5 mr-2" /> Favoritos
-          </Link>
-          <Link
-            to="/autores"
-            className="flex items-center w-full text-left py-2 hover:bg-gray-100 transition-colors"
-          >
-            <FaBook className="w-5 h-5 mr-2" /> Autores
-          </Link>
+            <IoCloseCircle className="w-5 h-5 mr-2" /> Cerrar Sesión
+          </button>
         </div>
       </div>
     </div>

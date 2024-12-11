@@ -82,8 +82,6 @@ export const UsuarioPages = () => {
     loadMembresia();
   }, [loadMembresia]);
 
-
-
   useEffect(() => {
     const loadFavoritos = () => {
       // Esto es solo un ejemplo, deberías cargar los favoritos desde una API o estado global
@@ -165,7 +163,7 @@ export const UsuarioPages = () => {
                   value={formik.values.tipoMembresia}
                   onChange={formik.handleChange}
                 >
-                  <option value="Gratis">Gratis</option>
+                  <option value="Prueba">Prueba</option>
                   <option value="Premium">Premium</option>
                 </select>
               </div>
