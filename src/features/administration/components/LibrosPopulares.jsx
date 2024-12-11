@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useLibrosPopulares } from '../hooks/useLibrosPopulares';
 import { useGeneroList } from '../../book/hooks';
+import { formatoTiempo } from '../../../shared/utils';
 
 export const LibrosPopulares = () => {
     const { librosPopulares } = useLibrosPopulares();
@@ -42,7 +43,7 @@ export const LibrosPopulares = () => {
             </p>
             <p className="text-sm text-gray-500">
               Fecha de Creación:{" "}
-              {new Date(libro.fechaCreacion).toLocaleDateString()}
+              {formatoTiempo(libro.fechaCreacion)}
             </p>
             <p className="text-sm text-gray-500">
               Promedio: {libro.promedio}

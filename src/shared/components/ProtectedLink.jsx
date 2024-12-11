@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuthStore } from "../../features/security/store";
-import { membresiaListConstant } from "../constants";
+import { membresiaListConstant, rolesListConstant } from "../constants";
 import { BiCheckCircle, BiLock } from "react-icons/bi";
 import { FaUser } from "react-icons/fa";
 import { IoMdCloseCircle } from "react-icons/io";
@@ -10,20 +10,21 @@ export const ProtectedLink = ({ to, children }) => {
   const membresia = useAuthStore((state) => state.membresia);
   const navigate = useNavigate();
   const [modal, setmodal] = useState(false);
+  const roles = useAuthStore((state) => state.roles);
 
   const handleClick = (event) => {
     if (
       ![membresiaListConstant.Premium, membresiaListConstant.Prueba].includes(
         membresia
-      )
+      ) &&  roles[0] !== rolesListConstant.ADMIN
     ) {
       event.preventDefault(); // Evitar la navegación del enlace
-      setmodal(true); // Mostrar el modal
+      setmodal(true); 
     }
   };
 
   const handleNavigateToProfile = () => {
-    setmodal(false); // Cerrar el modal
+    setmodal(false); 
     navigate("/usuario"); // Redirigir al perfil de usuario
   };
 
