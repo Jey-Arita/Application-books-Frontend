@@ -4,8 +4,27 @@ import { BsFileEarmarkPersonFill } from "react-icons/bs";
 import { FaTags, FaUsers } from "react-icons/fa6";
 import { ImBooks, ImExit } from "react-icons/im";
 import { MdDashboard } from "react-icons/md";
+import { useEffect, useState } from "react";
+import { jwtDecode } from "jwt-decode";
 
 export const Menu = () => {
+  const [email, setEmail] = useState(null);
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      try {
+        const decodedToken = jwtDecode(token);
+        const email =
+          decodedToken[
+            "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress"
+          ];
+        setEmail(email || "Usuario desconocido");
+      } catch (err) {
+        setError("Token inválido. Por favor, inicia sesión.");
+      }
+    }
+  }, []);
+
   return (
     <div className="w-66 bg-white rounded-lg">
       {/* Encabezado de usuario */}
@@ -13,8 +32,7 @@ export const Menu = () => {
         <div className="flex items-center">
           <FaUserCircle className="w-12 h-12 mr-4 text-blue-500" />
           <div>
-            <p className="text-lg font-bold text-black">Jane Doe</p>
-            <p className="text-sm text-gray-600">janedoe@example.com</p>
+            <p className="text-lg text-gray-600">{email}</p>
           </div>
         </div>
       </div>
@@ -48,24 +66,6 @@ export const Menu = () => {
         >
           <FaTags className="w-6 h-6 mr-3 text-rose-500" />
           Generos
-        </Link>
-        <Link
-          to="#"
-          className="flex items-center px-6 py-3 text-xl font-medium text-gray-800 hover:text-blue-500 hover:bg-blue-100 transition duration-200"
-        >
-          <FaUsers className="w-6 h-6 mr-3 text-purple-500" />
-          Usuarios
-        </Link>
-      </div>
-
-      {/* Botón de salir */}
-      <div className="py-2 border-t border-gray-200">
-        <Link
-          to="#"
-          className="flex items-center px-6 py-3 text-xl font-medium text-red-600 hover:text-red-800 hover:bg-red-100 transition duration-200"
-        >
-          <ImExit className="w-6 h-6 mr-3" />
-          Salir
         </Link>
       </div>
     </div>

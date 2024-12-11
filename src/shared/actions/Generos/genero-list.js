@@ -9,3 +9,13 @@ export const geGeneroList = async () => {
         return error.response;
     }
 }
+
+export const getGenerosLibrosList = async (generoId) => {
+    try {
+        const {data} = await appApi.get(`/libros/genero/${generoId}`);
+        return data;
+    } catch (error) {
+        console.error(error);
+        return error.response;
+    }
+}

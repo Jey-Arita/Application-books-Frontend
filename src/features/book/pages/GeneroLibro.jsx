@@ -45,7 +45,7 @@ export const GeneroLibro = () => {
             >
               <h2 className="text-2xl font-semibold text-center">
                 <Link
-                  to="#"
+                  to={`/genero/libros/${genero.id}`}
                   className="text-rose-900 hover:text-rose-700 transition-colors duration-300"
                 >
                   {genero.nombre}

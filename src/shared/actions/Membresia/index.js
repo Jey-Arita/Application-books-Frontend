@@ -29,3 +29,13 @@ export const putMembresia = async (id) => {
       throw error; 
   }
 };
+
+export const getMembresiaCount = async () => {
+  try {
+      const { data } = await appApi.get('/membresia/count');
+      return data;
+  } catch (error) {
+      console.error(error);
+      throw error; 
+  }
+};

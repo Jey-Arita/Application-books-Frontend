@@ -1,7 +1,7 @@
 import { Navigate, Route, Routes, useLocation } from "react-router-dom";
 import { Footer, Nav } from "../components";
 import { InicioPage } from "../pages/InicioPage";
-import { AutorPage, FavoritosPage, LibroPage, UsuarioPages, AutoresPage, BienvenidaPage, GeneroLibro} from "../pages";
+import { AutorPage, FavoritosPage, LibroPage, UsuarioPages, AutoresPage, BienvenidaPage, GeneroLibro, GeneroListLibros} from "../pages";
 
 export const AppLibrosRouter = () => {
   const location = useLocation();
@@ -24,6 +24,7 @@ export const AppLibrosRouter = () => {
             <Route path="/usuario" element={<UsuarioPages />} />
             <Route path="/bienvenida" element={<BienvenidaPage/>}/>
             <Route path="/genero" element={<GeneroLibro/>}/>
+            <Route path="/genero/libros/:id" element={<GeneroListLibros/>}/>
             <Route path="/*" element={<Navigate to="/bienvenida" />} />
           </Routes>
         </div>
